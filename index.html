@@ -156,7 +156,22 @@
     a[href]::after { content: ""; }
   }
 </style>
-<style id="__pe-base">.pe-hidden{display:none!important}@media print{.pe-bar,.pe-toast{display:none!important}nav.tabs{display:none!important}#langToggle{display:none!important}#competitors{display:none!important}section{display:block!important;page-break-after:always}section:last-of-type{page-break-after:auto}}</style></head>
+<style id="__pe-base">.pe-hidden{display:none!important}@media print{.pe-bar,.pe-toast{display:none!important}nav.tabs{display:none!important}#langToggle{display:none!important}#competitors{display:none!important}section{display:block!important;page-break-after:always}section:last-of-type{page-break-after:auto}}</style><style id="__mobile">
+@media (max-width:680px){
+  body{padding:1rem !important;}
+  h1{font-size:1.3rem;padding-right:3.4rem;} .subtitle{font-size:.8rem;}
+  nav.tabs{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:.35rem;padding-bottom:.6rem;scrollbar-width:none;}
+  nav.tabs::-webkit-scrollbar{display:none;}
+  nav.tabs a{white-space:nowrap;flex:0 0 auto;font-size:.85rem;padding:.45rem .7rem;}
+  .card-row,.feature-grid,.pricing-grid,.kpi-row{grid-template-columns:1fr !important;}
+  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .tbl-wrap table{min-width:560px;}
+  h2{font-size:1rem;} h3{font-size:.9rem;}
+  #langToggle{top:10px;right:10px;padding:.4rem .7rem;}
+  .pe-next-btn{width:100%;}
+}
+</style>
+</head>
 <body>
 
 <h1>Gzim Barber House, Platform Proposal</h1>
@@ -172,7 +187,7 @@
   
   
   
-<a class="active" onclick="show('overview',this)">Overview</a><a onclick="show('features',this)">Features</a><a onclick="show('roi',this)">ROI Scenarios</a><a onclick="show('vs-current',this)">vs. Current Website</a><a onclick="show('analytics',this)" class="" style="display: none;">Analytics</a><a onclick="show('roadmap',this)">Roadmap</a><a onclick="show('pricing',this)">Our Pricing</a><a onclick="show('pitch-points',this)" class="" style="display: none;">Key Pitch Points</a></nav><section id="overview" class="active">
+<a class="active" onclick="show('overview',this)">Overview</a><a onclick="show('features',this)">Features</a><a onclick="show('roi',this)">ROI Scenarios</a><a onclick="show('analytics',this)" class="" style="display: none;">Analytics</a><a onclick="show('roadmap',this)">Roadmap</a><a onclick="show('pricing',this)">Our Pricing</a><a onclick="show('pitch-points',this)" class="" style="display: none;">Key Pitch Points</a></nav><section id="overview" class="active">
   <h2>Who I Am</h2>
   <p>I am a <strong>Microsoft Certified Engineer</strong> specialised in scalable web applications. I build custom platforms for small and medium businesses, not off-the-shelf templates, but purpose-built systems owned entirely by the client, hosted in Switzerland, with no third-party dependency on the critical path. Before writing a single line of code for this platform, I spent time understanding how Gzim Barber House operates: the booking volume, the language mix of your clients, the invoicing requirements under Swiss law, and the daily friction that costs you time. What you are looking at is the result.</p>
 
@@ -509,160 +524,6 @@
   </div>
 
   <div class="note">* ROI figures represent estimated monthly value gained net of platform fee, compared to the current platform's capabilities. Revenue assumes CHF 35 average ticket. Time savings valued at CHF 50/hour. Booking volume (~875/month) inferred from WooCommerce sequential order numbers sampled at 12 real visits between Jan 2024 and Jun 2026; actual figures may vary. Actual results depend on adoption speed, client mix, and local market conditions.</div>
-</section><section id="vs-current">
-  <h2>Our Platform vs. gzim-barberhouse.ch (Current Site)</h2>
-  <p style="margin-bottom:1rem">Side-by-side comparison of what exists today versus what our platform delivers. Based on a direct analysis of the live current website.</p>
-
-  <div class="tbl-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Feature</th>
-          <th>gzim-barberhouse.ch (current)</th>
-          <th class="us">Our Platform</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- ── Section 1: Both offer ─────────────────────────────── -->
-        <tr class="section-divider"><td colspan="3">Features both platforms offer</td></tr>
-        <tr>
-          <td><strong>Online booking</strong></td>
-          <td class="yes">Yes</td>
-          <td class="yes">Yes</td>
-        </tr>
-        <tr>
-          <td><strong>Automatic invoicing + Swiss VAT</strong></td>
-          <td class="yes">Yes</td>
-          <td class="yes">Yes</td>
-        </tr>
-        <tr>
-          <td><strong>Multi-location support</strong></td>
-          <td class="yes">Yes</td>
-          <td class="yes">Yes</td>
-        </tr>
-
-        <!-- ── Section 2: Improved on ours ───────────────────────── -->
-        <tr class="section-divider"><td colspan="3">Same feature, improved on our platform</td></tr>
-        <tr>
-          <td><strong>Languages</strong></td>
-          <td class="partial">French only</td>
-          <td class="yes">FR + EN + DE</td>
-        </tr>
-        <tr>
-          <td><strong>Advance booking window</strong></td>
-          <td class="partial">Current week only</td>
-          <td class="yes">Weeks or months ahead</td>
-        </tr>
-        <tr>
-          <td><strong>Per-barber availability</strong></td>
-          <td class="partial">Current week</td>
-          <td class="yes">Unlimited horizon, configurable</td>
-        </tr>
-        <tr>
-          <td><strong>Booking confirmation email</strong></td>
-          <td class="partial">Generic receipt</td>
-          <td class="yes">Branded + .ics + PDF, in client's language</td>
-        </tr>
-        <tr>
-          <td><strong>Reschedule / cancel</strong></td>
-          <td class="partial">Phone only</td>
-          <td class="yes">Self-service (up to 24h before)</td>
-        </tr>
-        <tr>
-          <td><strong>Admin control panel</strong></td>
-          <td class="partial">WordPress admin</td>
-          <td class="yes">Custom dashboard: bookings, staff, KPIs, theme</td>
-        </tr>
-
-        <!-- ── Section 3: Exclusive to ours ──────────────────────── -->
-        <tr class="section-divider"><td colspan="3">Only available on our platform</td></tr>
-        <tr>
-          <td><strong>Loyalty program</strong></td>
-          <td class="no">No</td>
-          <td class="yes">Digital stamp card, reward auto-applied at booking</td>
-        </tr>
-        <tr>
-          <td><strong>Search engine optimisation (SEO)</strong></td>
-          <td class="no">French only, no structured data</td>
-          <td class="yes">Multilingual sitemap, hreflang, Schema.org rich results</td>
-        </tr>
-        <tr>
-          <td><strong>Customer accounts</strong></td>
-          <td class="no">No</td>
-          <td class="yes">Yes, history, rebooking, preferences</td>
-        </tr>
-        <tr>
-          <td><strong>Google Sign-In</strong></td>
-          <td class="no">No</td>
-          <td class="yes">Yes</td>
-        </tr>
-        <tr>
-          <td><strong>Barber time-off management</strong></td>
-          <td class="no">No</td>
-          <td class="yes">Yes, blocks slots automatically</td>
-        </tr>
-        <tr>
-          <td><strong>Custom visual themes</strong></td>
-          <td class="no">Fixed design</td>
-          <td class="yes">3 premium themes, admin-switchable</td>
-        </tr>
-        <tr>
-          <td><strong>Analytics &amp; reporting</strong></td>
-          <td class="no">Basic order totals</td>
-          <td class="yes">Revenue trends, barber performance, top clients, service revenue</td>
-        </tr>
-        <tr>
-          <td><strong>Data ownership</strong></td>
-          <td class="no">Third-party host</td>
-          <td class="yes">100% owned by Gzim</td>
-        </tr>
-        <tr>
-          <td><strong>Data location</strong></td>
-          <td class="no">Unknown</td>
-          <td class="yes">Azure Switzerland North (Zurich)</td>
-        </tr>
-        <tr>
-          <td><strong>GDPR / DSG privacy policies</strong></td>
-          <td class="no">None found</td>
-          <td class="yes">Full (FR/EN/DE)</td>
-        </tr>
-        <tr>
-          <td><strong>Error monitoring</strong></td>
-          <td class="no">-</td>
-          <td class="yes">Sentry, 24/7</td>
-        </tr>
-        <tr>
-          <td><strong>Session replay</strong></td>
-          <td class="no">-</td>
-          <td class="yes">Yes</td>
-        </tr>
-        <tr>
-          <td><strong>Mobile-first responsive design</strong></td>
-          <td class="partial">Basic</td>
-          <td class="yes">Tested on PC, Android &amp; iPhone</td>
-        </tr>
-        <tr>
-          <td><strong>Client reviews showcase</strong></td>
-          <td class="no">No</td>
-          <td class="yes">Google 5.0 ★ carousel, admin-curated</td>
-        </tr>
-        <tr>
-          <td><strong>Barber profiles &amp; photos</strong></td>
-          <td class="no">No</td>
-          <td class="yes">Photo + bio shown while booking</td>
-        </tr>
-        <tr>
-          <td><strong>Audit log / change history</strong></td>
-          <td class="no">No</td>
-          <td class="yes">Every change tracked (who / when / what)</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="callout green" style="margin-top: 1.5rem; display: none;">
-    <p><strong>Bottom line:</strong> The current website is a brochure with a third-party booking widget attached. Our platform is a fully integrated business operating system, booking, staff, invoicing, clients, and data, all under Gzim's control, in 3 languages, with no commissions.</p>
-  </div>
 </section><section id="analytics">
   <h2>Analytics &amp; Reporting</h2>
   <p style="margin-bottom:1rem;color:var(--muted)">Every booking and payment is stored in your own database. The admin dashboard surfaces it in real time across four views, Overview, Operations, Clients, and Revenue. <span style="color:var(--muted);font-style:italic">Figures below are illustrative sample data.</span></p>
@@ -1994,4 +1855,31 @@
 
 
 
+<script id="__nextbtn">
+(function(){
+  function tabs(){ return [].slice.call(document.querySelectorAll('nav.tabs a')).filter(function(a){return getComputedStyle(a).display!=='none';}); }
+  function idOf(a){ var m=/show\('([^']+)'/.exec(a.getAttribute('onclick')||''); return m?m[1]:null; }
+  function build(){
+    var t = tabs();
+    t.forEach(function(a,i){
+      var id=idOf(a); var sec=id&&document.getElementById(id); if(!sec) return;
+      var nxt=t[i+1];
+      var wrap=sec.querySelector('.pe-next-wrap');
+      if(!nxt){ if(wrap) wrap.remove(); return; }
+      if(!wrap){
+        wrap=document.createElement('div'); wrap.className='pe-next-wrap';
+        wrap.style.cssText='margin:2.6rem 0 .5rem;text-align:center';
+        var b=document.createElement('button'); b.className='pe-next-btn';
+        b.style.cssText='background:var(--accent);color:#1a1510;border:0;border-radius:9px;padding:.75rem 1.4rem;font-size:.92rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.35)';
+        wrap.appendChild(b); sec.appendChild(wrap);
+      }
+      var b=wrap.querySelector('button'); var nid=idOf(nxt);
+      b.textContent=(document.documentElement.lang==='en'?'Next: ':'Suivant : ')+nxt.textContent.trim()+'  →';
+      b.onclick=function(){ if(typeof show==='function') show(nid,nxt); window.scrollTo({top:0,behavior:'smooth'}); };
+    });
+  }
+  if(document.readyState!=='loading') build(); else document.addEventListener('DOMContentLoaded',build);
+  var _al=window.applyLang; if(_al){ window.applyLang=function(l){ _al(l); try{build();}catch(e){} }; }
+})();
+</script>
 </body></html>
