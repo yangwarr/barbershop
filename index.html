@@ -160,9 +160,8 @@
 @media (max-width:680px){
   body{padding:1rem !important;}
   h1{font-size:1.3rem;padding-right:3.4rem;} .subtitle{font-size:.8rem;}
-  nav.tabs{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:.35rem;padding-bottom:.6rem;scrollbar-width:none;}
-  nav.tabs::-webkit-scrollbar{display:none;}
-  nav.tabs a{white-space:nowrap;flex:0 0 auto;font-size:.85rem;padding:.45rem .7rem;}
+  nav.tabs{flex-wrap:wrap;gap:.4rem;padding-bottom:.6rem;}
+  nav.tabs a{white-space:nowrap;font-size:.85rem;padding:.45rem .7rem;}
   .card-row,.feature-grid,.pricing-grid,.kpi-row{grid-template-columns:1fr !important;}
   .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
   .tbl-wrap table{min-width:560px;}
@@ -1857,6 +1856,7 @@
 
 <script id="__nextbtn">
 (function(){
+  var __lt=document.getElementById("langToggle"); if(__lt) __lt.remove();
   function tabs(){ return [].slice.call(document.querySelectorAll('nav.tabs a')).filter(function(a){return getComputedStyle(a).display!=='none';}); }
   function idOf(a){ var m=/show\('([^']+)'/.exec(a.getAttribute('onclick')||''); return m?m[1]:null; }
   function build(){
