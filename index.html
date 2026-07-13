@@ -102,6 +102,8 @@
   .plan ul li { font-size: .8rem; color: var(--muted); padding: .3rem 0; border-bottom: 1px solid var(--border); display: flex; gap: .5rem; }
   .plan ul li:last-child { border-bottom: none; }
   .plan ul li::before { content: "✓"; color: var(--green); flex-shrink: 0; }
+  .plan ul li.no::before { content: "✗"; color: var(--red); }
+  .plan ul li.no { color: var(--muted); opacity:.7; }
 
   .badge { display: inline-block; padding: .1rem .4rem; border-radius: 3px; font-size: .72rem; font-weight: 700; }
 
@@ -785,7 +787,7 @@
         <li>Automatic invoicing</li>
         <li>All 3 languages</li>
         <li>Azure Switzerland hosting</li>
-        <li>Email support</li>
+        <li>Email support</li><li class="no">Admin panel</li>
       </ul>
     </div>
 
@@ -797,11 +799,11 @@
       <ul>
         <li>Everything in Solo</li>
         <li>Multi-location support</li>
-        <li>Unlimited barbers</li>
+        <li>Unlimited barbers</li><li>Admin panel (Jazzmin)</li>
         <li>Sentry error monitoring</li>
         <li>Session replay</li>
-        <li>Admin panel (Jazzmin)</li>
-        <li>3 premium themes</li>
+        
+        
         <li>Priority support</li>
         <li>Premium modules &amp; custom features à la carte, one-time fee priced by complexity, own it forever</li>
       </ul>
@@ -1564,7 +1566,7 @@
     "None found": "Aucune trouvée",
     "Full (FR/EN/DE)": "Complètes (FR/EN/DE)",
     "Error monitoring": "<strong>Surveillance des erreurs</strong>",
-    "Session replay": "<strong>Relecture de session</strong>",
+    "Session replay": "<strong>Relecture de session du client</strong>",
     "Mobile-first responsive design": "<strong>Design responsive pensé mobile d'abord</strong>",
     "Basic": "Basique",
     "Tested on PC, Android & iPhone": "Testé sur PC, Android & iPhone",
@@ -1673,6 +1675,7 @@
     "Everything in Solo": "Tout de l'offre Solo",
     "Unlimited barbers": "Barbiers illimités",
     "Sentry error monitoring": "Surveillance des erreurs Sentry",
+    "Admin panel": "Panneau d'administration",
     "Admin panel (Jazzmin)": "Panneau d'administration (Jazzmin)",
     "3 premium themes": "3 thèmes premium",
     "Priority support": "Support prioritaire",
@@ -1680,10 +1683,10 @@
     "/ month · CHF 4'367 billed annually · done-for-you growth": "/ mois · CHF 4'367 facturé annuellement · croissance clé en main",
     "FOR GROWTH & MULTI-SALON": "TOUT INCLUS — PLUS AVANTAGEUX QU'À LA CARTE",
     "Everything in Business": "Tout de l'offre Business",
-    "All premium modules included, online shop, win-back automation, loyalty & gift cards, SMS/WhatsApp reminders (no per-module fees)": "Tous les modules premium inclus, boutique en ligne, relances automatiques, fidélité & cartes cadeaux, rappels SMS/WhatsApp (aucun frais par module)",
+    "All premium modules included, online shop, win-back automation, loyalty & gift cards, SMS/WhatsApp reminders (no per-module fees)": "Tous les modules premium inclus sur demande, boutique en ligne, relances automatiques, fidélité & cartes cadeaux, rappels SMS/WhatsApp (aucun frais par module)",
     "Done-for-you marketing, Google Business Profile, automated review requests, trilingual local SEO": "Marketing clé en main, fiche Google Business, demandes d'avis automatisées, SEO local trilingue",
     "Fiduciaire-ready VAT/tax exports + accounting-software sync": "Exports TVA/fiscaux prêts pour le fiduciaire + synchro logiciel comptable",
-    "New custom features built for you every month, included, no one-time build fees": "De nouvelles fonctionnalités sur mesure développées chaque mois, incluses, sans frais de développement uniques",
+    "New custom features built for you every month, included, no one-time build fees": "De nouvelles fonctionnalités/modules sur mesure développées chaque mois, incluses, sans frais de développement uniques",
     "Dedicated Azure environment + 99.9% uptime SLA": "Environnement Azure dédié + SLA de disponibilité 99.9%",
     "Priority same-day support, direct line to the engineer": "Support prioritaire le jour même, ligne directe avec l'ingénieur",
     "Quarterly growth review & strategy call": "Bilan de croissance trimestriel & appel stratégique",
