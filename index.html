@@ -1,0 +1,1992 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sales Pitch, Gzim Barber House Platform</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f0f0f; --bg2: #1a1a1a; --bg3: #141414;
+    --text: #f0ece0; --muted: #888; --accent: #c9a84c;
+    --border: #2a2a2a; --green: #4ade80; --red: #f87171; --blue: #60a5fa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif; padding: 2rem; font-size: .9rem; }
+
+  h1 { color: var(--accent); font-size: 1.5rem; margin-bottom: .2rem; }
+  .subtitle { color: var(--muted); font-size: .82rem; margin-bottom: 2rem; }
+
+  /* Tab nav */
+  nav.tabs { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+  nav.tabs a { color: var(--muted); text-decoration: none; font-size: .82rem; padding: .35rem .75rem; border-radius: 4px; cursor: pointer; }
+  nav.tabs a:hover { color: var(--text); background: rgba(255,255,255,.05); }
+  nav.tabs a.active { color: var(--accent); background: rgba(201,168,76,.12); }
+
+  section { display: none; }
+  section.active { display: block; }
+
+  h2 { font-size: 1rem; color: var(--accent); margin-bottom: .6rem; margin-top: 2rem; }
+  h2:first-child { margin-top: 0; }
+  h3 { font-size: .9rem; color: var(--text); margin-bottom: .4rem; margin-top: 1.4rem; }
+  p, li { color: var(--muted); line-height: 1.7; }
+  ul { padding-left: 1.4rem; margin-bottom: 1rem; }
+  strong { color: var(--text); }
+
+  /* Cards */
+  .card-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1.2rem 0; }
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; }
+  .card .big { font-size: 2rem; font-weight: 700; color: var(--accent); line-height: 1.1; }
+  .card .label { font-size: .75rem; color: var(--muted); margin-top: .3rem; }
+  .card .sublabel { font-size: .72rem; color: var(--muted); margin-top: .5rem; line-height: 1.5; }
+  .card.green .big { color: var(--green); }
+  .card.red .big { color: var(--red); }
+  .card.blue .big { color: var(--blue); }
+
+  /* Tables */
+  .tbl-wrap { overflow-x: auto; margin: 1rem 0; }
+  table { border-collapse: collapse; width: 100%; font-size: .82rem; }
+  th { background: var(--bg2); color: var(--muted); font-weight: 600; padding: .5rem .75rem; border: 1px solid var(--border); text-align: left; white-space: nowrap; }
+  td { padding: .45rem .75rem; border: 1px solid var(--border); color: var(--muted); vertical-align: top; }
+  tr:nth-child(even) td { background: rgba(255,255,255,.02); }
+  td.yes { color: var(--green); font-weight: 600; }
+  td.no { color: var(--red); }
+  td.us { color: var(--accent); font-weight: 600; }
+  td.partial { color: #fbbf24; }
+  th.us { color: var(--accent); background: rgba(201,168,76,.08); }
+  td.us-cell { background: rgba(201,168,76,.05); color: var(--accent); font-weight: 600; }
+  tr.section-divider td { background: rgba(255,255,255,.06); color: var(--muted); font-size:.73rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:.4rem 1rem; border-top: 1px solid var(--border); }
+
+  /* Callout boxes */
+  .callout { border-left: 3px solid var(--accent); background: rgba(201,168,76,.07); padding: .75rem 1rem; border-radius: 0 6px 6px 0; margin: 1rem 0; }
+  .callout.green { border-color: var(--green); background: rgba(74,222,128,.07); }
+  .callout.red { border-color: var(--red); background: rgba(248,113,113,.07); }
+  .callout p { color: var(--text); font-size: .85rem; }
+
+  /* ROI scenario cards */
+  .scenario-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; margin: 1.2rem 0; }
+  .scenario { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 1.4rem; }
+  .scenario.pessimist { border-top: 3px solid var(--red); }
+  .scenario.realistic { border-top: 3px solid var(--accent); }
+  .scenario.optimist { border-top: 3px solid var(--green); }
+  .scenario h3 { font-size: .9rem; margin-top: 0; margin-bottom: .75rem; }
+  .scenario.pessimist h3 { color: var(--red); }
+  .scenario.realistic h3 { color: var(--accent); }
+  .scenario.optimist h3 { color: var(--green); }
+  .scenario .roi-line { display: flex; justify-content: space-between; padding: .3rem 0; border-bottom: 1px solid var(--border); font-size: .8rem; }
+  .scenario .roi-line:last-of-type { border-bottom: none; }
+  .scenario .roi-total { margin-top: .75rem; padding-top: .75rem; border-top: 2px solid var(--border); font-weight: 700; font-size: .95rem; color: var(--text); display: flex; justify-content: space-between; }
+  .pos { color: var(--green); }
+  .neg { color: var(--red); }
+
+  /* Feature list */
+  .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: .75rem; margin: 1rem 0; }
+  .feature { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: .85rem 1rem; display: flex; gap: .75rem; align-items: flex-start; }
+  .feature .icon { font-size: 1.2rem; flex-shrink: 0; }
+  .feature .name { font-weight: 600; color: var(--text); font-size: .85rem; }
+  .feature .desc { color: var(--muted); font-size: .78rem; margin-top: .15rem; line-height: 1.5; }
+
+  /* Pricing tiers */
+  .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1.2rem 0; }
+  .plan { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 1.4rem; }
+  .plan.featured { border-color: var(--accent); background: rgba(201,168,76,.06); }
+  .plan .plan-name { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: .5rem; }
+  .plan .plan-price { font-size: 1.8rem; font-weight: 700; color: var(--accent); }
+  .plan .plan-period { font-size: .78rem; color: var(--muted); }
+  .plan .plan-tag { display: inline-block; background: rgba(201,168,76,.2); color: var(--accent); font-size: .72rem; padding: .15rem .5rem; border-radius: 3px; margin: .5rem 0 .75rem; font-weight: 700; }
+  .plan ul { list-style: none; padding: 0; margin-top: .75rem; }
+  .plan ul li { font-size: .8rem; color: var(--muted); padding: .3rem 0; border-bottom: 1px solid var(--border); display: flex; gap: .5rem; }
+  .plan ul li:last-child { border-bottom: none; }
+  .plan ul li::before { content: "✓"; color: var(--green); flex-shrink: 0; }
+
+  .badge { display: inline-block; padding: .1rem .4rem; border-radius: 3px; font-size: .72rem; font-weight: 700; }
+
+  /* Billing toggle */
+  .billing-toggle { background: var(--bg2); border: 1px solid var(--border); color: var(--muted); padding: .4rem 1.1rem; border-radius: 4px; cursor: pointer; font-size: .82rem; }
+  .billing-toggle.active { background: var(--accent); border-color: var(--accent); color: #1a1510; font-weight: 600; }
+
+  /* Analytics charts */
+  .chart-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.1rem; }
+  .chart-box canvas { max-height: 220px; }
+  .chart-label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--muted); margin-bottom:.75rem; display:block; }
+  .period-btn { font-size:.72rem; padding:2px 8px; border-radius:4px; border:1px solid var(--border); background:transparent; cursor:pointer; color:var(--muted); }
+  .period-btn.active { background:var(--accent); border-color:var(--accent); color:#1a1510; font-weight:600; }
+  .badge-new { background: rgba(74,222,128,.15); color: var(--green); }
+  .badge-warn { background: rgba(251,191,36,.15); color: #fbbf24; }
+
+  /* Analytics sub-tabs, KPI tiles & heatmap, mirrors the live admin dashboard */
+  .subtabs { display:flex; gap:.4rem; flex-wrap:wrap; margin:.25rem 0 1.25rem; border-bottom:1px solid var(--border); padding-bottom:1rem; }
+  .subtab { font-size:.8rem; padding:.4rem .9rem; border-radius:6px; border:1px solid var(--border); background:transparent; color:var(--muted); cursor:pointer; transition:background .15s,color .15s,border-color .15s; }
+  .subtab:hover { color:var(--text); }
+  .subtab.active { background:var(--accent); border-color:var(--accent); color:#1a1510; font-weight:600; }
+  .sub-panel.hidden { display:none; }
+  .kpi-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:.85rem; margin-bottom:1.1rem; }
+  .kpi { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:1rem 1.1rem; }
+  .kpi .kpi-label { font-size:.74rem; color:var(--muted); }
+  .kpi .kpi-value { font-size:1.55rem; font-weight:700; color:var(--text); margin-top:.25rem; line-height:1.1; }
+  .kpi .kpi-value .unit { font-size:.85rem; font-weight:400; color:var(--muted); }
+  .kpi .kpi-sub { font-size:.72rem; color:var(--muted); margin-top:.3rem; }
+  .heat-table { border-collapse:separate; border-spacing:3px; width:auto; }
+  .heat-table th { background:transparent; border:none; color:var(--muted); font-size:.62rem; font-weight:400; padding:0 0 2px; text-align:center; white-space:nowrap; }
+  .heat-table td { border:none; padding:0; }
+  .heat-cell { width:24px; height:20px; border-radius:3px; border:1px solid rgba(255,255,255,.05); }
+  .heat-day { color:var(--muted); font-size:.7rem; padding-right:.5rem !important; white-space:nowrap; text-align:right; }
+  .heat-legend { display:flex; align-items:center; gap:.35rem; font-size:.7rem; color:var(--muted); margin-left:auto; }
+  .heat-legend .sw { width:12px; height:12px; border-radius:3px; display:inline-block; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+  .note { font-size: .78rem; color: var(--muted); margin-top: 1rem; font-style: italic; }
+
+  /* ---- Print / Save-as-PDF: tabs don't exist on paper, so lay every section out linearly,
+          keep the dark theme (print-color-adjust), and don't split cards across pages ---- */
+  @page { margin: 12mm; }
+  @media print {
+    html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact;
+                 background: var(--bg) !important; padding: 0 !important; font-size: .82rem; }
+    nav.tabs, #langToggle, .pe-bar, .pe-toast, #competitors { display: none !important; }
+    section { display: block !important; margin: 0 0 1.4rem !important; }
+    section + section { page-break-before: always; }
+    .card, .feature, .plan, table, .kpi, .callout { break-inside: avoid; page-break-inside: avoid; }
+    h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
+    .pe-hidden { display: none !important; }
+    a[href]::after { content: ""; }
+  }
+</style>
+<style id="__pe-base">.pe-hidden{display:none!important}@media print{.pe-bar,.pe-toast{display:none!important}nav.tabs{display:none!important}#langToggle{display:none!important}#competitors{display:none!important}section{display:block!important;page-break-after:always}section:last-of-type{page-break-after:auto}}</style></head>
+<body>
+
+<h1>Gzim Barber House, Platform Proposal</h1>
+<p class="subtitle" style="display: none;">Sales pitch reference · Pricing · ROI · Competitive analysis · Last updated: July 2026</p>
+
+<nav class="tabs">
+  
+  
+  
+  
+  <!-- <a onclick="show('competitors',this)">Competitor Pricing</a> -->
+  
+  
+  
+  
+<a class="active" onclick="show('overview',this)">Overview</a><a onclick="show('features',this)">Features</a><a onclick="show('roi',this)">ROI Scenarios</a><a onclick="show('vs-current',this)">vs. Current Website</a><a onclick="show('analytics',this)" class="" style="display: none;">Analytics</a><a onclick="show('roadmap',this)">Roadmap</a><a onclick="show('pricing',this)">Our Pricing</a><a onclick="show('pitch-points',this)" class="" style="display: none;">Key Pitch Points</a></nav><section id="overview" class="active">
+  <h2>Who I Am</h2>
+  <p>I am a <strong>Microsoft Certified Engineer</strong> specialised in scalable web applications. I build custom platforms for small and medium businesses, not off-the-shelf templates, but purpose-built systems owned entirely by the client, hosted in Switzerland, with no third-party dependency on the critical path. Before writing a single line of code for this platform, I spent time understanding how Gzim Barber House operates: the booking volume, the language mix of your clients, the invoicing requirements under Swiss law, and the daily friction that costs you time. What you are looking at is the result.</p>
+
+  <div class="callout" style="margin-top:1rem">
+    <p><strong>You never touch anything technical.</strong> The platform is professionally managed for you end to end. Hosting, security patches, backups, uptime monitoring, bug fixes, and improvements are all handled by a Microsoft Certified Engineer. You run the barbershop; the website runs itself, and someone qualified is watching it 24/7. That is a level of ongoing care a booking widget or a WordPress plugin simply does not come with.</p>
+  </div>
+
+  <h2 style="margin-top:2rem">What I Built</h2>
+  <p>A complete, custom-built online booking platform tailored specifically for Gzim Barber House, deployed today on Microsoft Azure inside Switzerland, and ready to go live. The platform is owned, branded, and operated exclusively for you.</p>
+
+  <div class="card-row" style="margin-top:1.5rem">
+    <div class="card">
+      <div class="big">3</div>
+      <div class="label">Languages supported</div>
+      <div class="sublabel">French · English · German<br>Auto-detected, instant switch</div>
+    </div>
+    <div class="card">
+      <div class="big">0%</div>
+      <div class="label">Commission on bookings</div>
+      <div class="sublabel">No commissions, ever. Every CHF goes to Gzim.</div>
+    </div>
+    <div class="card green">
+      <div class="big">100%</div>
+      <div class="label">Data ownership</div>
+      <div class="sublabel">All client data, invoices, and booking history belong to Gzim, not a third party.</div>
+    </div>
+    <div class="card blue">
+      <div class="big">24/7</div>
+      <div class="label">Online bookings</div>
+      <div class="sublabel">Clients book any time, any device, in their language, without calling.</div>
+    </div>
+  </div>
+
+  <h2 class="" style="display: none;">The Situation</h2>
+  <p class="" style="display: none;">The <strong>gzim-barberhouse.ch</strong> website appears to be a custom-built platform from several years ago, most likely WordPress + WooCommerce with a booking plugin. It works, but it was built for a simpler time and a smaller operation. It is French only, has no customer accounts, limits booking to the current week, and cannot handle rescheduling or cancellations without a phone call.</p>
+
+  <div class="callout" style="margin-top: 1.2rem; display: none;">
+    <p class="" style="display: none;"><strong>The real question is not cost, it is what the current platform cannot do.</strong> A client who wants to book 3 weeks from now cannot. A client who wants to reschedule must call during opening hours. A German or English speaker who finds the salon on Google cannot navigate the booking. These are bookings and clients that quietly go elsewhere, with no trace in any report.</p>
+  </div>
+
+  <h2 class="" style="display: none;">The Solution</h2>
+  <p class="" style="display: none;">Our platform replaces the third-party booking widget with an owned, branded system that gives Gzim full control over their schedule, staff, clients, and revenue, at a flat monthly rate with zero commissions.</p>
+
+  <div class="callout" style="margin-top: 0.75rem; display: none;">
+    <p class="" style="display: none;"><strong>One sentence:</strong> Replace an ageing custom site that can only book this week and requires a phone call to change anything, with a trilingual platform that handles booking, rescheduling, invoicing, and three languages.</p>
+  </div>
+</section><section id="features">
+  <h2>Platform Features, What Is Built and Live Today</h2>
+
+  <div class="feature-grid">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  <div class="feature" data-fid="f0">
+      <div class="icon">🛠️</div>
+      <div>
+        <div class="name">Full Admin Dashboard</div>
+        <div class="desc">Manage services, prices, staff, locations, opening hours, site text, themes, and all appointments from one secure admin panel. No third-party logins needed.</div>
+      </div>
+    </div><div class="feature" data-fid="f1">
+      <div class="icon">📅</div>
+      <div>
+        <div class="name">Real-Time Online Booking</div>
+        <div class="desc">Clients choose location → service → barber → available slot. Slot is immediately blocked to prevent double-booking. Works 24/7 on any device.</div>
+      </div>
+    </div><div class="feature" data-fid="f17">
+      <div class="icon">📆</div>
+      <div>
+        <div class="name">Effortless Staff &amp; Schedule Management</div>
+        <div class="desc">Add or remove a barber in seconds, assign them to one or both salons, set their weekly hours per location, and block holidays or sick days, the booking calendar updates automatically so no one gets booked when they're off. Scaling the team or opening a third location needs no developer.</div>
+      </div>
+    </div><div class="feature" data-fid="f6">
+      <div class="icon">✂️</div>
+      <div>
+        <div class="name">Multi-Barber Scheduling</div>
+        <div class="desc">Each barber has individual weekly working hours per location, plus specific time-off blocks (holidays, sick days). The booking system only shows slots when that barber is actually available.</div>
+      </div>
+    </div><div class="feature" data-fid="f8">
+      <div class="icon">✉️</div>
+      <div>
+        <div class="name">Automated Booking Confirmation Email</div>
+        <div class="desc">Sent automatically on every booking via Gmail SMTP. Includes a .ics calendar invite (Apple Calendar / Google Calendar compatible) and the PDF invoice as attachments. Rendered in the client's language (FR/EN/DE).</div>
+      </div>
+    </div><div class="feature" data-fid="f7">
+      <div class="icon">📍</div>
+      <div>
+        <div class="name">Multi-Location Support</div>
+        <div class="desc">Each location has its own address, phone number, opening hours, embedded Google Map, and barber roster. Clients choose their preferred salon at the start of the booking flow.</div>
+      </div>
+    </div><div class="feature" data-fid="f3">
+      <div class="icon">👤</div>
+      <div>
+        <div class="name">Customer Accounts + Google Sign-In</div>
+        <div class="desc">Clients register or sign in with Google. They see their full appointment history, can reschedule or cancel (up to 24h before), and re-book past services in two clicks.</div>
+      </div>
+    </div><div class="feature" data-fid="f2">
+      <div class="icon">🌍</div>
+      <div>
+        <div class="name">Three Languages (FR / EN / DE)</div>
+        <div class="desc">Full translation of the entire site: menus, booking flow, emails, legal pages, error messages. Instant switch with the language selector. Morges has a large English and German-speaking population (Expats, EPFL, international companies).</div>
+      </div>
+    </div><div class="feature" data-fid="f4">
+      <div class="icon">🎁</div>
+      <div>
+        <div class="name">Digital Loyalty Stamp Card <span class="badge badge-new">New</span></div>
+        <div class="desc">Every completed visit automatically earns a stamp, no app to download and no plastic card to lose. After 10 visits the client unlocks a reward that applies itself at the very next booking: they enter their email, see the discount before they confirm, and the total updates live. Each client gets a private personal card page and a branded email at every step, and a rewarded booking that is later cancelled refunds the reward automatically. Fully self-service, running on the booking data the platform already captures.</div>
+      </div>
+    </div><div class="feature" data-fid="f5">
+      <div class="icon">🧾</div>
+      <div>
+        <div class="name">Automatic VAT-Compliant Invoicing</div>
+        <div class="desc">An invoice is generated automatically for every booking. Swiss VAT (8.1%) is calculated and shown separately. Invoices are numbered sequentially, stored in the system, and can be downloaded by clients. Required by Swiss accounting law (Art. 958f CO).</div>
+      </div>
+    </div><div class="feature" data-fid="f9">
+      <div class="icon">🎨</div>
+      <div>
+        <div class="name">3 Premium Visual Themes</div>
+        <div class="desc">Midnight Gold (dark luxury), Photo Hero (image-driven), Monogram Luxury (editorial). Switchable from the admin in one click with no developer needed.</div>
+      </div>
+    </div><div class="feature" data-fid="f10">
+      <div class="icon">🔒</div>
+      <div>
+        <div class="name">GDPR / Swiss DSG Compliance</div>
+        <div class="desc">Privacy policies in all 3 languages with correct legal bases (legitimate interest, contract). Session recording disclosed. Data hosted in Azure Switzerland North, fully GDPR and nLPD compliant.</div>
+      </div>
+    </div><div class="feature" data-fid="f11">
+      <div class="icon">📊</div>
+      <div>
+        <div class="name">Error Monitoring + Session Replay</div>
+        <div class="desc">Sentry monitors the live site 24/7. If a client hits an error during booking, we see it before they complain. Session replays let us reproduce and fix bugs within hours, not days.</div>
+      </div>
+    </div><div class="feature" data-fid="f12">
+      <div class="icon">🇨🇭</div>
+      <div>
+        <div class="name">Swiss Hosting (Azure Switzerland North)</div>
+        <div class="desc">All data, client info, invoices, booking history, is stored in Switzerland. Compliant with Swiss data protection law. Not on a shared US server.</div>
+      </div>
+    </div><div class="feature" data-fid="f13">
+      <div class="icon">📱</div>
+      <div>
+        <div class="name">Modern, Mobile-First Design</div>
+        <div class="desc">A fast, app-like experience that is tested and polished on PC, Android, and iPhone. The booking flow builds the client's selection in real time, phone numbers are tap-to-call, and the whole site adapts cleanly to every screen size. Most clients book on their phone, the site is built for that first.</div>
+      </div>
+    </div><div class="feature" data-fid="f14">
+      <div class="icon">⭐</div>
+      <div>
+        <div class="name">Client Reviews Showcase</div>
+        <div class="desc">Your real Google reviews (5.0 ★, 250+) are featured on the home page in an elegant carousel, and a built-in admin manager lets you curate which testimonials appear. Social proof turns first-time visitors into bookings.</div>
+      </div>
+    </div><div class="feature" data-fid="f15">
+      <div class="icon">🔎</div>
+      <div>
+        <div class="name">Built-In Trilingual SEO</div>
+        <div class="desc">The platform ships search-engine ready: a multilingual sitemap, hreflang tags that tell Google to serve the right language (FR/EN/DE) to the right client, Schema.org structured data for rich results, and per-page meta descriptions in all three languages. It is the technical groundwork that makes Gzim findable by the English- and German-speaking clients a French-only site never reaches, while an indexing switch keeps private staff areas out of search.</div>
+      </div>
+    </div><div class="feature" data-fid="f16">
+      <div class="icon">🧔</div>
+      <div>
+        <div class="name">Barber Profiles &amp; Photos</div>
+        <div class="desc">Each barber has a photo, bio, and calendar colour. Clients see who will be cutting their hair while booking, a personal, trust-building touch that a generic widget cannot offer. Photos are stored securely in Swiss Azure storage.</div>
+      </div>
+    </div><div class="feature" data-fid="f18">
+      <div class="icon">🗒️</div>
+      <div>
+        <div class="name">Full Change History (Audit Log)</div>
+        <div class="desc">Every change, a booking rescheduled, a status updated, a price edited, is recorded with who did it, when, and the before/after values. Complete accountability across staff, and a clear trail for any dispute or question.</div>
+      </div>
+    </div><div class="feature" data-fid="f19">
+      <div class="icon">💳</div>
+      <div>
+        <div class="name">Audit-Safe Invoice Voiding</div>
+        <div class="desc">Invoices are legal records, so they are never silently deleted. A wrong invoice is voided (and can be restored), keeping a clean, tamper-evident financial history that your fiduciaire and Swiss law both expect.</div>
+      </div>
+    </div></div>
+</section><section id="roi">
+  <h2>ROI, Value of the Upgrade</h2>
+
+  <h3>Time Saved on Booking Changes, The Hidden Cost Nobody Counts</h3>
+  <p style="margin-bottom:1rem">Every cancellation or reschedule today requires a phone call: the client calls, a staff member or the owner answers (or calls back), looks up the slot, finds an alternative, confirms, and updates the system. That is 3 minutes of productive time per interaction, while a barber is cutting hair and the phone should not be ringing.</p>
+
+  <div class="card-row">
+    <div class="card">
+      <div class="big">~65</div>
+      <div class="label">Booking changes / month by phone</div>
+      <div class="sublabel">7.5% of 875 bookings</div>
+    </div>
+    <div class="card">
+      <div class="big">~3 min</div>
+      <div class="label">Average per phone interaction</div>
+      <div class="sublabel">Find client → check schedule → confirm → update system</div>
+    </div>
+    <div class="card red">
+      <div class="big">~3.25 hrs</div>
+      <div class="label">Owner/staff time lost per month</div>
+      <div class="sublabel">65 interactions × 3 min = 195 min, during service hours when the phone shouldn't ring</div>
+    </div>
+    <div class="card green">
+      <div class="big">CHF 0</div>
+      <div class="label">Phone calls with our platform</div>
+      <div class="sublabel">Clients reschedule or cancel themselves online, up to 24h before. Slot reopens immediately for someone else.</div>
+    </div>
+  </div>
+
+  <div class="callout green" style="margin-top:1rem">
+    <p><strong>Value of reclaimed time:</strong> 3.25 hours/month × CHF 50 (owner's effective hourly rate) = <strong>CHF 165/month</strong>. That is 45 minutes per week of scheduling interruptions, during service hours, eliminated entirely.</p>
+  </div>
+
+  <h3>Predictable Income &amp; a Calmer Schedule</h3>
+  <p style="margin-bottom:1rem">Today the calendar only fills one week at a time, so every Monday starts near-empty and the week depends on walk-ins and same-day calls. When clients can book weeks or months ahead, the schedule fills further out, the owner and each barber can see next week and next month already taking shape.</p>
+
+  <div class="card-row">
+    <div class="card" style="display: none;">
+      <div class="big" style="display: none;">7 days</div>
+      <div class="label">Current visibility of the book</div>
+      <div class="sublabel">Nothing beyond this week, income and staffing are guesswork past Sunday.</div>
+    </div>
+    <div class="card green">
+      <div class="big">Weeks–months</div>
+      <div class="label">Visibility with our platform</div>
+      <div class="sublabel">Appointments land far in advance, so the calendar is partly filled before the week even starts.</div>
+    </div>
+    <div class="card blue">
+      <div class="big">Plan ahead</div>
+      <div class="label">Staffing, holidays, life</div>
+      <div class="sublabel">Set time off and staffing around a book you can actually see, not around surprises.</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p><strong>A booking made three weeks out is revenue you can already count on.</strong> Predictable demand means fewer empty chairs, less feast-or-famine, and the ability to plan staff hours and personal time around a schedule that is already partly booked, instead of reacting to whoever calls this morning.</p>
+  </div>
+
+  <div class="scenario-grid" style="margin-top:2rem">
+    <div class="scenario pessimist">
+      <h3>PESSIMISTIC</h3>
+      <p style="font-size:.78rem;color:var(--muted);margin-bottom:.75rem">Low adoption. Clients stick to calling. Only a few EN/DE clients convert.</p>
+      <div class="roi-line"><span>Platform fee</span><span class="neg">−CHF 197</span></div>
+      <div class="roi-line"><span>Phone booking changes eliminated (50%)</span><span class="pos">+CHF 83</span></div>
+      <div class="roi-line"><span>Advance booking window (3 extra apts/mo)</span><span class="pos">+CHF 105</span></div>
+      <div class="roi-line"><span>EN/DE clients converted (+2 apts/mo)</span><span class="pos">+CHF 70</span></div>
+      <div class="roi-line"><span>No-show reduction (.ics invite, −1.5% of 875)</span><span class="pos">+CHF 455</span></div>
+      <div class="roi-total"><span>Net monthly gain</span><span class="pos">+CHF 516</span></div>
+      <p style="font-size:.78rem;color:var(--muted);margin-top:.75rem"><strong style="color:var(--red)">Annual: +CHF 6,192</strong> · Payback: month 1</p>
+    </div>
+
+    <div class="scenario realistic">
+      <h3>REALISTIC ★</h3>
+      <p style="font-size:.78rem;color:var(--muted);margin-bottom:.75rem">Good adoption. Self-service becomes the norm. EN/DE clients find the site and convert steadily.</p>
+      <div class="roi-line"><span>Platform fee</span><span class="neg">−CHF 197</span></div>
+      <div class="roi-line"><span>Phone booking changes eliminated (80%)</span><span class="pos">+CHF 130</span></div>
+      <div class="roi-line"><span>Advance booking window (+8 apts/mo)</span><span class="pos">+CHF 280</span></div>
+      <div class="roi-line"><span>EN/DE clients converted (+7 apts/mo)</span><span class="pos">+CHF 245</span></div>
+      <div class="roi-line"><span>No-show reduction (.ics invite, −3% of 875)</span><span class="pos">+CHF 910</span></div>
+      <div class="roi-line"><span>Repeat bookings via client accounts</span><span class="pos">+CHF 350</span></div>
+      <div class="roi-total"><span>Net monthly gain</span><span class="pos">+CHF 1,718</span></div>
+      <p style="font-size:.78rem;color:var(--muted);margin-top:.75rem"><strong style="color:var(--accent)">Annual: +CHF 20,616</strong></p>
+    </div>
+
+    <div class="scenario optimist">
+      <h3>OPTIMISTIC</h3>
+      <p style="font-size:.78rem;color:var(--muted);margin-bottom:.75rem">Strong adoption. The trilingual site becomes Gzim's main growth driver in the region.</p>
+      <div class="roi-line"><span>Platform fee</span><span class="neg">−CHF 197</span></div>
+      <div class="roi-line"><span>Phone booking changes fully eliminated</span><span class="pos">+CHF 163</span></div>
+      <div class="roi-line"><span>Advance booking window (+15 apts/mo)</span><span class="pos">+CHF 525</span></div>
+      <div class="roi-line"><span>EN/DE clients converted (+12 apts/mo)</span><span class="pos">+CHF 420</span></div>
+      <div class="roi-line"><span>No-show reduction (.ics invite, −5% of 875)</span><span class="pos">+CHF 1,505</span></div>
+      <div class="roi-line"><span>Repeat bookings + account loyalty</span><span class="pos">+CHF 700</span></div>
+      <div class="roi-total"><span>Net monthly gain</span><span class="pos">+CHF 3,116</span></div>
+      <p style="font-size:.78rem;color:var(--muted);margin-top:.75rem"><strong style="color:var(--green)">Annual: +CHF 37,392</strong></p>
+    </div>
+  </div>
+
+  <h3>Key ROI Drivers Explained</h3>
+
+  <div class="tbl-wrap" style="margin-top:.75rem">
+    <table>
+      <thead>
+        <tr>
+          <th>Driver</th>
+          <th>How it works</th>
+          <th>Evidence / benchmark</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Self-service booking changes</strong></td>
+          <td>Clients cancel or reschedule themselves online up to 24h before. No phone call, no interruption during a cut, no staff time. The freed slot becomes immediately available for someone else to book.</td>
+          <td>65 phone interactions/month × 3 min = 195 min of staff/owner time. Valued at CHF 50/h = CHF 165/month recovered, reclaimed during service hours when interruptions cost more than the minutes.</td>
+        </tr>
+        <tr>
+          <td><strong>Advance booking window</strong></td>
+          <td>Current platform shows only this week's availability. Clients planning a wedding haircut, a holiday trim, or a monthly routine cannot book more than 7 days ahead, they go to whoever lets them. Our platform is bookable weeks or months in advance.</td>
+          <td>Any client who plans more than a week ahead is currently lost. Even capturing 5–8 of those per month = CHF 175–280.</td>
+        </tr>
+        <tr>
+          <td><strong>Trilingual acquisition (EN/DE)</strong></td>
+          <td>English and German speakers in the Morges / Lake Geneva area (EPFL, expats, international companies) cannot navigate a French-only booking site. Our platform is the only barbershop site in the area that works in all three languages.</td>
+          <td>Vaud canton: ~20% non-French speakers. Capturing 2 new clients/month = CHF 70 (pessimistic); 7/month = CHF 245 (realistic); 12/month = CHF 420 (optimistic). Conservative estimates, the platform is the only trilingual barbershop site in Morges.</td>
+        </tr>
+        <tr>
+          <td><strong>No-show reduction</strong></td>
+          <td>Booking confirmation email includes a .ics calendar invite that lands directly in Apple Calendar or Google Calendar. A client with the appointment in their calendar is significantly less likely to forget.</td>
+          <td>At 10% baseline no-show rate on 875 bookings = ~87 empty slots. A 3% reduction = 26 slots saved × CHF 35 = CHF 910/month.</td>
+        </tr>
+        <tr>
+          <td><strong>Stress reduction / focus time</strong></td>
+          <td>Each of the 65 monthly phone interactions happens during service hours, meaning a barber or the owner is interrupted mid-cut. The call must be answered, the calendar checked, an alternative offered, and the system updated. Our platform removes every one of those interruptions: clients reschedule themselves online up to 24h before. The salon is quieter, staff are less distracted, and the client in the chair gets undivided attention.</td>
+          <td>Unquantifiable in CHF, but 65 fewer interruptions per month is a meaningful quality-of-life improvement for anyone working behind the chair. Often more persuasive than any spreadsheet figure.</td>
+        </tr>
+        <tr>
+          <td><strong>Repeat booking via accounts</strong></td>
+          <td>Logged-in clients can see their full appointment history and rebook a past service in two clicks. No re-entering of details, no re-choosing the barber, friction removed. Lower friction = more repeat visits.</td>
+          <td>Barbershop repeat visit rates improve measurably when self-service accounts exist. Even 10 extra repeat bookings/month = CHF 350.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">* ROI figures represent estimated monthly value gained net of platform fee, compared to the current platform's capabilities. Revenue assumes CHF 35 average ticket. Time savings valued at CHF 50/hour. Booking volume (~875/month) inferred from WooCommerce sequential order numbers sampled at 12 real visits between Jan 2024 and Jun 2026; actual figures may vary. Actual results depend on adoption speed, client mix, and local market conditions.</div>
+</section><section id="vs-current">
+  <h2>Our Platform vs. gzim-barberhouse.ch (Current Site)</h2>
+  <p style="margin-bottom:1rem">Side-by-side comparison of what exists today versus what our platform delivers. Based on a direct analysis of the live current website.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>gzim-barberhouse.ch (current)</th>
+          <th class="us">Our Platform</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- ── Section 1: Both offer ─────────────────────────────── -->
+        <tr class="section-divider"><td colspan="3">Features both platforms offer</td></tr>
+        <tr>
+          <td><strong>Online booking</strong></td>
+          <td class="yes">Yes</td>
+          <td class="yes">Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Automatic invoicing + Swiss VAT</strong></td>
+          <td class="yes">Yes</td>
+          <td class="yes">Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Multi-location support</strong></td>
+          <td class="yes">Yes</td>
+          <td class="yes">Yes</td>
+        </tr>
+
+        <!-- ── Section 2: Improved on ours ───────────────────────── -->
+        <tr class="section-divider"><td colspan="3">Same feature, improved on our platform</td></tr>
+        <tr>
+          <td><strong>Languages</strong></td>
+          <td class="partial">French only</td>
+          <td class="yes">FR + EN + DE</td>
+        </tr>
+        <tr>
+          <td><strong>Advance booking window</strong></td>
+          <td class="partial">Current week only</td>
+          <td class="yes">Weeks or months ahead</td>
+        </tr>
+        <tr>
+          <td><strong>Per-barber availability</strong></td>
+          <td class="partial">Current week</td>
+          <td class="yes">Unlimited horizon, configurable</td>
+        </tr>
+        <tr>
+          <td><strong>Booking confirmation email</strong></td>
+          <td class="partial">Generic receipt</td>
+          <td class="yes">Branded + .ics + PDF, in client's language</td>
+        </tr>
+        <tr>
+          <td><strong>Reschedule / cancel</strong></td>
+          <td class="partial">Phone only</td>
+          <td class="yes">Self-service (up to 24h before)</td>
+        </tr>
+        <tr>
+          <td><strong>Admin control panel</strong></td>
+          <td class="partial">WordPress admin</td>
+          <td class="yes">Custom dashboard: bookings, staff, KPIs, theme</td>
+        </tr>
+
+        <!-- ── Section 3: Exclusive to ours ──────────────────────── -->
+        <tr class="section-divider"><td colspan="3">Only available on our platform</td></tr>
+        <tr>
+          <td><strong>Loyalty program</strong></td>
+          <td class="no">No</td>
+          <td class="yes">Digital stamp card, reward auto-applied at booking</td>
+        </tr>
+        <tr>
+          <td><strong>Search engine optimisation (SEO)</strong></td>
+          <td class="no">French only, no structured data</td>
+          <td class="yes">Multilingual sitemap, hreflang, Schema.org rich results</td>
+        </tr>
+        <tr>
+          <td><strong>Customer accounts</strong></td>
+          <td class="no">No</td>
+          <td class="yes">Yes, history, rebooking, preferences</td>
+        </tr>
+        <tr>
+          <td><strong>Google Sign-In</strong></td>
+          <td class="no">No</td>
+          <td class="yes">Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Barber time-off management</strong></td>
+          <td class="no">No</td>
+          <td class="yes">Yes, blocks slots automatically</td>
+        </tr>
+        <tr>
+          <td><strong>Custom visual themes</strong></td>
+          <td class="no">Fixed design</td>
+          <td class="yes">3 premium themes, admin-switchable</td>
+        </tr>
+        <tr>
+          <td><strong>Analytics &amp; reporting</strong></td>
+          <td class="no">Basic order totals</td>
+          <td class="yes">Revenue trends, barber performance, top clients, service revenue</td>
+        </tr>
+        <tr>
+          <td><strong>Data ownership</strong></td>
+          <td class="no">Third-party host</td>
+          <td class="yes">100% owned by Gzim</td>
+        </tr>
+        <tr>
+          <td><strong>Data location</strong></td>
+          <td class="no">Unknown</td>
+          <td class="yes">Azure Switzerland North (Zurich)</td>
+        </tr>
+        <tr>
+          <td><strong>GDPR / DSG privacy policies</strong></td>
+          <td class="no">None found</td>
+          <td class="yes">Full (FR/EN/DE)</td>
+        </tr>
+        <tr>
+          <td><strong>Error monitoring</strong></td>
+          <td class="no">-</td>
+          <td class="yes">Sentry, 24/7</td>
+        </tr>
+        <tr>
+          <td><strong>Session replay</strong></td>
+          <td class="no">-</td>
+          <td class="yes">Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Mobile-first responsive design</strong></td>
+          <td class="partial">Basic</td>
+          <td class="yes">Tested on PC, Android &amp; iPhone</td>
+        </tr>
+        <tr>
+          <td><strong>Client reviews showcase</strong></td>
+          <td class="no">No</td>
+          <td class="yes">Google 5.0 ★ carousel, admin-curated</td>
+        </tr>
+        <tr>
+          <td><strong>Barber profiles &amp; photos</strong></td>
+          <td class="no">No</td>
+          <td class="yes">Photo + bio shown while booking</td>
+        </tr>
+        <tr>
+          <td><strong>Audit log / change history</strong></td>
+          <td class="no">No</td>
+          <td class="yes">Every change tracked (who / when / what)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout green" style="margin-top: 1.5rem; display: none;">
+    <p><strong>Bottom line:</strong> The current website is a brochure with a third-party booking widget attached. Our platform is a fully integrated business operating system, booking, staff, invoicing, clients, and data, all under Gzim's control, in 3 languages, with no commissions.</p>
+  </div>
+</section><section id="analytics">
+  <h2>Analytics &amp; Reporting</h2>
+  <p style="margin-bottom:1rem;color:var(--muted)">Every booking and payment is stored in your own database. The admin dashboard surfaces it in real time across four views, Overview, Operations, Clients, and Revenue. <span style="color:var(--muted);font-style:italic">Figures below are illustrative sample data.</span></p>
+
+  <div class="subtabs" id="analytics-subtabs">
+    <button type="button" class="subtab active" data-sub="ov">Overview</button>
+    <button type="button" class="subtab" data-sub="ops">Operations</button>
+    <button type="button" class="subtab" data-sub="cli">Clients</button>
+    <button type="button" class="subtab" data-sub="rev">Revenue</button>
+  </div>
+
+  <!-- ─────────────── OVERVIEW ─────────────── -->
+  <div class="sub-panel" data-sub="ov">
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-label">Revenue collected</div><div class="kpi-value">27'300 <span class="unit">CHF</span></div><div class="kpi-sub">780 completed appts</div></div>
+      <div class="kpi"><div class="kpi-label">Potential revenue</div><div class="kpi-value">1'820 <span class="unit">CHF</span></div><div class="kpi-sub">52 pending appts</div></div>
+      <div class="kpi"><div class="kpi-label">Total appointments</div><div class="kpi-value">875</div><div class="kpi-sub">this month</div></div>
+      <div class="kpi"><div class="kpi-label">Completion rate</div><div class="kpi-value">89.1<span class="unit">%</span></div><div class="kpi-sub">43 cancelled</div></div>
+    </div>
+
+    <div class="chart-box" style="margin-bottom:1rem">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
+        <span class="chart-label" style="margin:0">Revenue over time</span>
+        <div style="display:flex;gap:.35rem">
+          <button class="period-btn active" id="abtn-monthly" onclick="switchRev('monthly')">Monthly</button>
+          <button class="period-btn" id="abtn-daily" onclick="switchRev('daily')">Daily</button>
+        </div>
+      </div>
+      <canvas id="aRevenueChart"></canvas>
+    </div>
+
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:1rem;margin-bottom:1rem">
+      <div class="chart-box"><span class="chart-label">Bookings per barber</span><canvas id="aBarberChart"></canvas></div>
+      <div class="chart-box"><span class="chart-label">Status breakdown</span><canvas id="aStatusChart"></canvas></div>
+      <div class="chart-box"><span class="chart-label">By location</span><canvas id="aLocationChart"></canvas></div>
+    </div>
+
+    <div class="chart-box" style="margin-bottom:1rem">
+      <span class="chart-label">Revenue by service (top 6)</span>
+      <canvas id="aServiceChart" style="max-height:160px"></canvas>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div class="chart-box">
+        <span class="chart-label">Top clients by spend</span>
+        <table style="width:100%;font-size:.78rem;border-collapse:collapse">
+          <thead><tr>
+            <th style="text-align:left;color:var(--muted);font-weight:600;font-size:.7rem;padding:.3rem .4rem;border-bottom:1px solid var(--border)">#</th>
+            <th style="text-align:left;color:var(--muted);font-weight:600;font-size:.7rem;padding:.3rem .4rem;border-bottom:1px solid var(--border)">Client</th>
+            <th style="text-align:right;color:var(--muted);font-weight:600;font-size:.7rem;padding:.3rem .4rem;border-bottom:1px solid var(--border)">Rdv</th>
+            <th style="text-align:right;color:var(--muted);font-weight:600;font-size:.7rem;padding:.3rem .4rem;border-bottom:1px solid var(--border)">CHF</th>
+          </tr></thead>
+          <tbody id="topClientsBody"></tbody>
+        </table>
+      </div>
+      <div class="chart-box">
+        <span class="chart-label">Today's schedule</span>
+        <table style="width:100%;font-size:.78rem;border-collapse:collapse">
+          <thead><tr>
+            <th style="text-align:left;color:var(--muted);font-weight:600;font-size:.7rem;padding:.3rem .4rem;border-bottom:1px solid var(--border)">Time</th>
+            <th style="text-align:left;color:var(--muted);font-weight:600;font-size:.7rem;padding:.3rem .4rem;border-bottom:1px solid var(--border)">Client</th>
+            <th style="text-align:left;color:var(--muted);font-weight:600;font-size:.7rem;padding:.3rem .4rem;border-bottom:1px solid var(--border)">Barber</th>
+          </tr></thead>
+          <tbody id="scheduleBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────── OPERATIONS ─────────────── -->
+  <div class="sub-panel hidden" data-sub="ops">
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-label">Busiest day</div><div class="kpi-value" style="font-size:1.3rem">Saturday</div></div>
+      <div class="kpi"><div class="kpi-label">Peak hour</div><div class="kpi-value">11h00</div></div>
+      <div class="kpi"><div class="kpi-label">Avg lead time</div><div class="kpi-value">4.6 <span class="unit">days</span></div></div>
+      <div class="kpi"><div class="kpi-label">Cancellation rate</div><div class="kpi-value">4.9<span class="unit">%</span></div></div>
+    </div>
+
+    <div class="chart-box" style="margin-bottom:1rem">
+      <span class="chart-label">Cancellation rate (12 months)</span>
+      <canvas id="opsCancelChart" style="max-height:180px"></canvas>
+    </div>
+
+    <div class="chart-box" style="margin-bottom:1rem">
+      <span class="chart-label">Hourly traffic · 2025 vs 2026</span>
+      <canvas id="opsHourChart" style="max-height:190px"></canvas>
+    </div>
+
+    <div class="chart-box" style="margin-bottom:1rem">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin-bottom:.25rem">
+        <span class="chart-label" style="margin:0">Traffic by day &amp; hour</span>
+        <div class="heat-legend">
+          <span>less</span>
+          <span class="sw" style="background:rgba(200,162,74,.2)"></span>
+          <span class="sw" style="background:rgba(200,162,74,.55)"></span>
+          <span class="sw" style="background:rgba(200,162,74,1)"></span>
+          <span>more</span>
+        </div>
+      </div>
+      <p style="font-size:.72rem;color:var(--muted);margin-bottom:.75rem">Cumulative bookings by weekday and hour.</p>
+      <div style="overflow-x:auto"><div id="opsHeatmap"></div></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+      <div class="chart-box"><span class="chart-label">Bookings by weekday · 2025 vs 2026</span><canvas id="opsWeekdayChart" style="max-height:180px"></canvas></div>
+      <div class="chart-box"><span class="chart-label">Booking lead time</span><canvas id="opsLeadChart" style="max-height:180px"></canvas></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div class="chart-box"><span class="chart-label">Workload per barber, booked hours (90 d)</span><canvas id="opsWorkloadChart" style="max-height:170px"></canvas></div>
+      <div class="chart-box"><span class="chart-label">Utilisation per barber (est., 90 d)</span><canvas id="opsUtilChart" style="max-height:170px"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ─────────────── CLIENTS ─────────────── -->
+  <div class="sub-panel hidden" data-sub="cli">
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-label">Unique clients</div><div class="kpi-value">612</div></div>
+      <div class="kpi"><div class="kpi-label">Retention rate</div><div class="kpi-value">63<span class="unit">%</span></div></div>
+      <div class="kpi"><div class="kpi-label">Avg ticket</div><div class="kpi-value">34.90 <span class="unit">CHF</span></div></div>
+      <div class="kpi"><div class="kpi-label">Clients to win back</div><div class="kpi-value">48</div></div>
+    </div>
+
+    <div class="chart-box" style="margin-bottom:1rem">
+      <span class="chart-label">New vs. returning clients (12 months)</span>
+      <canvas id="cliNewRetChart" style="max-height:200px"></canvas>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+      <div class="chart-box"><span class="chart-label">Bookings by city (top 8)</span><canvas id="cliCityChart" style="max-height:190px"></canvas></div>
+      <div class="chart-box"><span class="chart-label">Guests vs. registered</span><canvas id="cliGuestChart" style="max-height:190px"></canvas></div>
+    </div>
+
+    <div class="chart-box">
+      <span class="chart-label">Win-back list, no visit in 60+ days</span>
+      <table style="width:100%;font-size:.78rem;border-collapse:collapse">
+        <thead><tr>
+          <th style="text-align:left;color:var(--muted);font-weight:600;font-size:.7rem;padding:.3rem .4rem;border-bottom:1px solid var(--border)">Client</th>
+          <th style="text-align:left;color:var(--muted);font-weight:600;font-size:.7rem;padding:.3rem .4rem;border-bottom:1px solid var(--border)">Last visit</th>
+          <th style="text-align:right;color:var(--muted);font-weight:600;font-size:.7rem;padding:.3rem .4rem;border-bottom:1px solid var(--border)">Rdv</th>
+          <th style="text-align:right;color:var(--muted);font-weight:600;font-size:.7rem;padding:.3rem .4rem;border-bottom:1px solid var(--border)">CHF</th>
+        </tr></thead>
+        <tbody id="winbackBody"></tbody>
+      </table>
+      <p style="font-size:.72rem;color:var(--muted);margin-top:.6rem;font-style:italic">This is exactly the list the proposed win-back coupon automation would email (see Roadmap).</p>
+    </div>
+  </div>
+
+  <!-- ─────────────── REVENUE ─────────────── -->
+  <div class="sub-panel hidden" data-sub="rev">
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-label">Forecast (pipeline)</div><div class="kpi-value">1'820 <span class="unit">CHF</span></div><div class="kpi-sub">52 upcoming appts</div></div>
+      <div class="kpi"><div class="kpi-label">VAT collected</div><div class="kpi-value">2'190 <span class="unit">CHF</span></div><div class="kpi-sub">8.1% Swiss VAT</div></div>
+      <div class="kpi"><div class="kpi-label">Avg ticket</div><div class="kpi-value">34.90 <span class="unit">CHF</span></div></div>
+    </div>
+
+    <div class="chart-box" style="margin-bottom:1rem">
+      <span class="chart-label">Average ticket over time (12 months)</span>
+      <canvas id="revAvgTicketChart" style="max-height:190px"></canvas>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div class="chart-box"><span class="chart-label">VAT collected per month</span><canvas id="revVatChart" style="max-height:180px"></canvas></div>
+      <div class="chart-box"><span class="chart-label">Revenue per barber</span><canvas id="revBarberChart" style="max-height:180px"></canvas></div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:1.5rem">
+    <p><strong>vs. WooCommerce:</strong> The current platform gives order totals. This tells you which barber generates the most revenue, which service has the best margin, when your salon is busiest, how many clients are slipping away, and the VAT owed at period end. Updated every time a booking completes.</p>
+  </div>
+</section><section id="roadmap">
+  <h2>Roadmap, Where the Platform Can Go Next</h2>
+  <p>The platform live today already covers booking, invoicing, staff, and analytics. Because the codebase is <strong>owned and purpose-built</strong>, not a rigid third-party product, new modules can be added directly on top of it, using data the system already captures. No switching platforms, no migration, no re-entering client information. These are the highest-impact next steps.</p>
+
+  <h3>High-Impact Next Modules</h3>
+  <div class="feature-grid">
+    <div class="feature">
+      <div class="icon">🛍️</div>
+      <div>
+        <div class="name">Online Shop <span class="badge badge-warn">Proposed</span></div>
+        <div class="desc">Sell the salon's own products, pomade, beard oil, shampoo, gift cards, directly on the site. Clients buy standalone or add a product to their booking. Owned and Swiss-hosted, with <strong>no marketplace commission</strong> on any sale. A new revenue line from the traffic the booking site already brings in.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="icon">🎟️</div>
+      <div>
+        <div class="name">Automated Win-Back Coupons <span class="badge badge-warn">Proposed</span></div>
+        <div class="desc">The system already knows each client's last visit. It can automatically email clients who haven't returned in X days (say, 8 weeks) with a personalised coupon code, "We miss you, here's 15% off your next cut." Dormant clients become repeat revenue on autopilot, with zero manual effort.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="icon">🧮</div>
+      <div>
+        <div class="name">Tax &amp; VAT Reports from Invoices <span class="badge badge-warn">Proposed</span></div>
+        <div class="desc">One-click monthly or quarterly VAT summary plus a full invoice export (CSV / Excel) for the fiduciaire, generated straight from the invoices the system already issues. The VAT owed becomes a single number at period end, instead of hours of manual bookkeeping.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Further Ideas on the Table</h3>
+  <div class="feature-grid">
+    <div class="feature">
+      <div class="icon">📱</div>
+      <div>
+        <div class="name">Native Mobile App (Android / iOS) <span class="badge badge-warn">Proposed</span></div>
+        <div class="desc">The booking site already works like an app on mobile. A native app in the App Store and Google Play goes one step further, a home-screen icon clients tap to re-book their usual cut in seconds, and push notifications for reminders and win-back offers that reach them even when email goes unread. It builds on the same platform and the same data, so it is an addition, not a rebuild.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="icon">💬</div>
+      <div>
+        <div class="name">SMS / WhatsApp Reminders <span class="badge badge-warn">Proposed</span></div>
+        <div class="desc">A text the day before the appointment, on top of the calendar invite, squeezing the no-show rate down even further.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="icon">🏅</div>
+      <div>
+        <div class="name">Points &amp; VIP Tiers <span class="badge badge-warn">Loyalty v2</span></div>
+        <div class="desc">The stamp-card loyalty program is already live (every 10th visit rewarded). The next step turns visits into spendable points and unlocks VIP tiers, bigger perks for your most frequent clients, all built on the same loyalty data the platform already tracks.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="icon">🎁</div>
+      <div>
+        <div class="name">Digital Gift Cards <span class="badge badge-warn">Proposed</span></div>
+        <div class="desc">Sell gift cards online, redeemable at booking, a popular seller around the holidays and an easy extra revenue line.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="icon">⏳</div>
+      <div>
+        <div class="name">Waitlist Auto-Fill <span class="badge badge-warn">Proposed</span></div>
+        <div class="desc">When a client cancels, the freed slot is offered automatically to waiting clients, so last-minute gaps get filled instead of lost.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout green" style="margin-top:1.2rem">
+    <p><strong>Every item above builds on data the platform already captures.</strong> Because Gzim owns the system, these are additions, not a new subscription, not a migration, not a fresh learning curve. The platform grows with the business.</p>
+  </div>
+</section><section id="pricing">
+  <h2>Our Pricing</h2>
+  <p style="margin-bottom:1.2rem">Simple, flat monthly fee. No commissions. No per-booking charges. No surprise invoices.</p>
+
+  <div style="display:flex;justify-content:center;align-items:center;gap:.5rem;margin-bottom:1.4rem">
+    <button id="toggle-monthly" class="billing-toggle active" onclick="setBilling('monthly')">Monthly</button>
+    <button id="toggle-annual" class="billing-toggle" onclick="setBilling('annual')">Annual &nbsp;<span style="display:inline-block;background:#15803d;color:#dcfce7;font-size:.68rem;font-weight:700;padding:1px 6px;border-radius:3px;vertical-align:middle">first month free</span></button>
+  </div>
+  <p id="annual-note" class="note" style="text-align:center;margin-top:-.75rem;margin-bottom:1.25rem;display:none">Billed once per year · First month included at no charge</p>
+
+  <div class="pricing-grid">
+    <div class="plan">
+      <div class="plan-name">Solo</div>
+      <div class="plan-price"><span class="price-m">CHF 147</span><span class="price-a" style="display:none">CHF 135</span></div>
+      <div class="plan-period"><span class="price-m">/ month · 1 location · up to 2 barbers</span><span class="price-a" style="display:none">/ month · CHF 1'617 billed annually · 1 location · up to 2 barbers</span></div>
+      <ul>
+        <li>Full booking system</li>
+        <li>Customer accounts</li>
+        <li>Automatic invoicing</li>
+        <li>All 3 languages</li>
+        <li>Azure Switzerland hosting</li>
+        <li>Email support</li>
+      </ul>
+    </div>
+
+    <div class="plan featured">
+      <div class="plan-name">Business</div>
+      <div class="plan-price"><span class="price-m">CHF 197</span><span class="price-a" style="display:none">CHF 181</span></div>
+      <div class="plan-period"><span class="price-m">/ month · unlimited locations · unlimited barbers</span><span class="price-a" style="display:none">/ month · CHF 2'167 billed annually · unlimited locations · unlimited barbers</span></div>
+      <div class="plan-tag">RECOMMENDED FOR GZIM</div>
+      <ul>
+        <li>Everything in Solo</li>
+        <li>Multi-location support</li>
+        <li>Unlimited barbers</li>
+        <li>Sentry error monitoring</li>
+        <li>Session replay</li>
+        <li>Admin panel (Jazzmin)</li>
+        <li>3 premium themes</li>
+        <li>Priority support</li>
+        <li>Premium modules &amp; custom features à la carte, one-time fee priced by complexity, own it forever</li>
+      </ul>
+    </div>
+
+    <div class="plan">
+      <div class="plan-name">Enterprise</div>
+      <div class="plan-price"><span class="price-m">CHF 397</span><span class="price-a" style="display:none">CHF 364</span></div>
+      <div class="plan-period"><span class="price-m">/ month · premium, done-for-you growth</span><span class="price-a" style="display:none">/ month · CHF 4'367 billed annually · done-for-you growth</span></div>
+      <div class="plan-tag">FOR GROWTH &amp; MULTI-SALON</div>
+      <ul>
+        <li>Everything in Business</li>
+        <li>All premium modules included, online shop, win-back automation, loyalty &amp; gift cards, SMS/WhatsApp reminders (no per-module fees)</li>
+        <li>Done-for-you marketing, Google Business Profile, automated review requests, trilingual local SEO</li>
+        <li>Fiduciaire-ready VAT/tax exports + accounting-software sync</li>
+        <li>New custom features built for you every month, included, no one-time build fees</li>
+        <li>Dedicated Azure environment + 99.9% uptime SLA</li>
+        <li>Priority same-day support, direct line to the engineer</li>
+        <li>Quarterly growth review &amp; strategy call</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:1.2rem">
+    <p><strong>Business add-ons, pay once, own it forever.</strong> On Business you keep the flat platform fee and add only the features you want, each billed as a single one-time fee based on how much work it takes to build, no recurring per-module charges. (On Enterprise, every module and custom build below is included at no extra cost.)</p>
+    <div class="tbl-wrap" style="margin-top:.8rem">
+      <table>
+        <thead>
+          <tr><th>Complexity</th><th>Typical examples</th><th class="" style="display: none;">One-time fee</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Simple</td><td>Extra field, small screen tweak, new email template, config change</td><td class="" style="display: none;">On quotation</td></tr>
+          <tr><td>Standard</td><td>A new module with its own admin &amp; booking flow, gift cards, loyalty page, staff commission sheet</td><td class="" style="display: none;">On quotation</td></tr>
+          <tr><td>Advanced</td><td>External integration, TWINT / card payments, accounting sync, SMS/WhatsApp automation, PWA push</td><td class="" style="display: none;">On quotation</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note" style="margin-top:.6rem">Every feature is quoted upfront before any work starts, priced once by complexity, then it's yours, deployed to your platform and maintained at no extra charge.</p>
+  </div>
+
+  <div class="callout" style="margin-top:1.2rem">
+    <p><strong>What Enterprise really is:</strong> not "Business with a bigger number", it's the <strong>done-for-you growth tier</strong> for an established or expanding operation. Business gives you the platform; Enterprise runs the growth engine on top of it: every premium module included as it ships, your local marketing and reviews actively managed, your accounting exports handled, a custom feature shipped every month, and a standing quarterly review where we look at retention, no-shows, and where the next revenue is. It targets the salon doing 3+ chairs or opening additional locations, where CHF 397 buys back far more than it costs in owner time and captured revenue.</p>
+  </div>
+
+  <div style="border-left:3px solid #4b5563;background:rgba(75,85,99,.08);padding:.75rem 1rem;border-radius:0 6px 6px 0;margin:1rem 0">
+    <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.6rem;color:var(--muted)">Further ideas to shape the tier (menu, not final)</p>
+    <ul style="margin:0;padding-left:1.1rem;line-height:1.9;font-size:.85rem;color:var(--muted)">
+      <li><strong>Multi-brand / white-label</strong>, run a second brand or concept from one system</li>
+      <li><strong>Staff performance &amp; commission tracking</strong>, per-barber revenue, tips, payout sheets</li>
+      <li><strong>Automated monthly business report</strong>, KPIs emailed to the owner, no login needed</li>
+      <li><strong>Client PWA / "add to home screen"</strong> app with push notifications for reminders &amp; offers</li>
+      <li><strong>No-show deposits / prepayment</strong> via TWINT or terminal integration</li>
+      <li><strong>Dedicated account manager</strong> + white-glove onboarding &amp; staff training</li>
+      <li class="" style="display: none;"><strong>Advanced security</strong>, annual penetration test, audit-log exports, WAF</li>
+      <li><strong>Priority roadmap influence</strong>, your feature requests jump the queue</li>
+    </ul>
+  </div>
+
+  <h3>What Is Included at Every Tier</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Item</th><th>Included?</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Azure App Service (Switzerland North)</td><td class="yes">Included</td><td>Always Swiss-hosted</td></tr>
+        <tr><td>Azure SQL Database</td><td class="yes">Included</td><td>Managed, backed-up, replicated</td></tr>
+        <tr><td>SSL/HTTPS certificate</td><td class="yes">Included</td><td>Auto-renewed via Azure</td></tr>
+        <tr><td>Sentry monitoring</td><td class="yes">Included</td><td>Error + session replay</td></tr>
+        <tr><td>Bug fixes</td><td class="yes">Included</td><td>All platform bugs fixed at no extra charge</td></tr>
+        <tr><td class="" style="display: none;">Minor feature updates</td><td class="yes" style="display: none;">Included</td><td class="" style="display: none;">Improvements deployed to all clients</td></tr>
+        <tr><td>Email confirmation system</td><td class="yes">Included</td><td>Via Gmail SMTP</td></tr>
+        <tr><td>Commission on bookings</td><td class="yes">0% always</td><td>No matter how many clients book online</td></tr>
+        <tr><td>Per-staff charges</td><td class="yes">CHF 0</td><td>Add as many barbers as needed</td></tr>
+        <tr><td>Domain hosting / migration</td><td class="yes">Included</td><td>Free migration from existing domain, or new domain purchased on your behalf</td></tr>
+        <tr><td>Custom feature development</td><td class="partial">Add-on · included on Enterprise</td><td>Business: one-time fee per feature, priced by complexity · Enterprise: built for you every month, included</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Annual Plan</h3>
+  <div class="card-row">
+    <div class="card green">
+      <div class="big">CHF 2'167</div>
+      <div class="label">Annual, Business Plan</div>
+      <div class="sublabel">First month free · CHF 181/month effective<br>Billed once · Cancel before renewal</div>
+    </div>
+    <div class="card">
+      <div class="big">CHF 197</div>
+      <div class="label">Monthly, Business Plan</div>
+      <div class="sublabel">Cancel any time with 30 days notice</div>
+    </div>
+  </div>
+
+  <h3>Gzim-Specific Investment Summary</h3>
+  <div class="callout green" style="margin-top:.75rem">
+    <p>
+      <strong>Setup cost:</strong> CHF 0, the platform is already built and deployed.<br><br>
+      <strong>Monthly cost:</strong> CHF 197 (Business Plan), flat, no commissions, no surprises.<br><br>
+      <strong>Break-even:</strong> Within 30 days, Gzim pays less and owns more.<br><br>
+      <strong>Realistic annual net gain:</strong> CHF 20,616 (see ROI tab).
+    </p>
+  </div>
+</section><section id="pitch-points">
+  <h2>Key Pitch Points, For the Conversation</h2>
+  <p style="margin-bottom:1.2rem">The arguments that matter most, in plain language.</p>
+
+  <h3>1. "The platform pays for itself on booking changes alone."</h3>
+  <div class="callout green">
+    <p>If 7.5% of your ~875 bookings/month get changed or cancelled, that's 65 phone interactions at ~3 minutes each = 195 minutes (3.25 hours) of your time per month, during service hours when the phone should not ring. At CHF 50/hour that's CHF 165/month. Add 2 new EN/DE clients at CHF 35 = CHF 70. Add 3 bookings from clients who could now book more than a week ahead = CHF 105. You're already at CHF 340 before counting no-shows, repeat bookings, or the stress of answering the phone mid-cut.</p>
+  </div>
+
+  <h3>2. "No-shows are costing you real money, here's what we do about it."</h3>
+  <div class="callout">
+    <p>Industry data shows 10–15% of barbershop appointments result in no-shows without reminders. At ~875 bookings/month, that's 87–130 empty chair-hours per month. A calendar invite (.ics) landing directly in the client's phone reduces no-shows measurably. Even recovering 26 appointments/month at CHF 35 = CHF 910/month recovered, more than 4× the platform cost, from this driver alone.</p>
+  </div>
+
+  <h3>3. "You can finally see next month, not just next week."</h3>
+  <div class="callout green">
+    <p>Today the calendar fills one week at a time, so every Monday starts near-empty and the week rides on walk-ins and same-day calls. When clients book weeks or months ahead, the schedule fills further out: you can plan staffing, holidays, and your own time around a book that's already partly full. A booking made three weeks from now is income you can count on today, predictable demand instead of feast-or-famine.</p>
+  </div>
+
+  <h3>4. "Most of your clients book on a phone, the site is built for that."</h3>
+  <div class="callout">
+    <p>The whole platform is modern, fast, and tested on PC, Android, and iPhone. The booking flow feels like an app: the client picks salon, service, barber, and slot while a live summary builds beside them, phone numbers are tap-to-call, and everything adapts to the screen. A smooth mobile experience is the difference between a booking completed and a booking abandoned, and it quietly signals that Gzim Barber House is a serious, current business.</p>
+  </div>
+
+  <h3>5. "Adding a barber or a location takes minutes, and you do it yourself."</h3>
+  <div class="callout">
+    <p>Grow the team, change someone's hours, block a holiday, swap a price, update the salon text, upload a barber's photo, all from the admin panel, no developer needed. Time off automatically blocks that barber's slots. Opening a third salon means adding a location, not rebuilding a website. And every change is recorded in an audit log, who changed what, and when, so nothing happens to your schedule or prices without a trace.</p>
+  </div>
+
+  <h3>6. "Your client data belongs to you, permanently."</h3>
+  <div class="callout red">
+    <p>Every client who books is stored in your own database, their name, contact, booking history, and total spend. No third party holds your list. No subscription price hike can hold you hostage. Cancel anytime and receive a complete data export in any format. This is your business data, on your server, under your control.</p>
+  </div>
+
+  <h3>7. "You're invisible to a significant share of your potential clients."</h3>
+  <div class="callout">
+    <p>The Morges area has a significant expat and international population, EPFL researchers, international company employees, English and German speakers who live 10 minutes from your salon. They search "barber Morges" or "Friseur Morges", land on a French-only site, and leave, not because they don't want to book, but because they can't navigate it. Our platform is trilingual. That is a competitive edge nobody else in Morges has.</p>
+  </div>
+
+  <h3>8. "You legally need invoices, we generate them automatically."</h3>
+  <div class="callout">
+    <p>Under Swiss law (Art. 958f CO), businesses must keep proper accounting records including VAT-compliant invoices. Our system generates a compliant, numbered, VAT-separated invoice for every booking, automatically, with zero manual work.</p>
+  </div>
+
+  <h3>9. "Every phone call mid-cut is a small failure of the experience."</h3>
+  <div class="callout">
+    <p>When a client calls to reschedule and the barber has to stop, pick up the phone, look up the schedule, find an alternative, and confirm, that is not just 3 minutes lost. It is an interruption in the middle of a haircut, a distraction for the client in the chair, and daily background stress that adds up across 65 interactions a month. Our platform removes those 65 interruptions entirely. A quieter salon is a better working environment and a better client experience.</p>
+  </div>
+
+  <h3>10. "This is not a subscription, it's ownership."</h3>
+  <div class="callout">
+    <p>Subscription platforms can change their pricing, restrict features, or shut down. Your client data, booking history, and invoices can disappear with them. Our platform is a custom-built system, you own the data, it lives on your Azure account, and you can export everything at any time. No lock-in beyond 30 days notice.</p>
+  </div>
+
+  <h3>11. "We proactively fix problems before clients notice."</h3>
+  <div class="callout">
+    <p>Sentry monitors the live site 24/7. If a client hits a bug on the booking page at 23h00, we know about it before they call to complain in the morning. Session replay shows us exactly what happened. Most platforms don't even tell you when something breaks, you find out from a 1-star Google review.</p>
+  </div>
+
+  <hr>
+
+  <h3>Objection Handling</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Objection</th><th>Response</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>"Our current website already has online booking."</strong></td>
+          <td>It does, in French only, without customer accounts, without automatic VAT invoices, and on a platform that holds your client data. Our system is yours: trilingual, client accounts, compliant invoices, zero commission, and all data belongs to you. The question isn't whether you have booking, it's what it can't do and who owns your clients.</td>
+        </tr>
+        <tr>
+          <td><strong>"We don't have many German/English clients."</strong></td>
+          <td>Yet. The reason you don't is that you're invisible to them. They search "barber Morges" in English, land on your French-only site, and leave. Our platform puts you in front of them in their language. You don't know how many clients you're losing, you only see the ones you have.</td>
+        </tr>
+        <tr>
+          <td><strong>"CHF 197/month seems expensive."</strong></td>
+          <td>CHF 197 is the cost of 45 minutes of scheduling phone calls per week, time that currently costs you that anyway, invisibly, during service hours. If the platform saves you that time alone, it's already near break-even. Every EN/DE client, every no-show avoided, every advance booking is pure upside on top.</td>
+        </tr>
+        <tr>
+          <td><strong>"What if I want to stop?"</strong></td>
+          <td>Cancel with 30 days notice. Your data is yours, we'll export it in any format. No lock-in, no long-term contracts, no penalty.</td>
+        </tr>
+        <tr>
+          <td><strong>"We already have loyal clients who know us."</strong></td>
+          <td>Loyalty is great. Our platform makes them even more loyal, they can rebook in two clicks, see their history, and get calendar reminders. And while you serve your loyal clients, the platform finds the next generation who might never have found you on a French-only site.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout" style="margin-top:2rem;margin-bottom:1.5rem">
+    <p><strong>Assumptions:</strong> 2 locations in Morges · ~4 barbers · CHF 35 average ticket · <strong>~875 bookings/month</strong> (inferred from real WooCommerce transaction velocity, see data note below) · ~7.5% of bookings (~65/month) involve a phone call to change or cancel · Current platform limits booking to the current week only. ROI is measured against the <em>status quo</em>, what Gzim gains by upgrading, regardless of what they currently pay.</p>
+  </div>
+
+  <div class="callout" style="margin-bottom:1.5rem;border-color:var(--blue);background:rgba(96,165,250,.07)">
+    <p><strong>Data note, 875 bookings/month:</strong> WooCommerce assigns sequential order numbers to all transactions. By comparing order numbers from real bookings at Gzim sampled over 30 months (Jan 2024 → Jun 2026), we can calculate the order velocity for each interval. Current run rate: ~29 orders/day = ~880/month. Applying a 5% discount for test/cancelled orders gives a working estimate of <strong>~875 completed bookings/month</strong>. Business has roughly doubled since early 2024 (~440/month), with a clear inflection point in Q1 2025 (likely coinciding with the second location opening). The main salon has 2 bookable chairs; at ~7 clients/chair/day that accounts for ~14 bookings at location 1, with the remaining ~15/day at location 2, consistent with a similar 2-chair setup there.</p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════ OVERVIEW -->
+
+
+
+<!-- ═══════════════════════════════════════════════ ANALYTICS -->
+
+
+<!-- ═══════════════════════════════════════════════ FEATURES -->
+
+
+
+<!-- ═══════════════════════════════════════════════ VS CURRENT -->
+
+
+
+<!-- ═══════════════════════════════════════════════ COMPETITORS -->
+<section id="competitors">
+  <h2>Competitor Pricing Analysis, Swiss Market (2025–2026)</h2>
+  <p style="margin-bottom:1.2rem">How the major booking platforms charge barbershops in Switzerland. All figures in CHF.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Platform</th>
+          <th>Monthly subscription</th>
+          <th>New client commission</th>
+          <th>Repeat client commission</th>
+          <th>Payment processing</th>
+          <th>Data ownership</th>
+          <th>Languages</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Fresha</strong></td>
+          <td>CHF 12.95 / barber<br><span style="color:var(--muted);font-size:.78rem">(4 barbers = CHF 51.80/mo)</span></td>
+          <td class="no"><strong>20%</strong> min. CHF 5</td>
+          <td class="yes">0%</td>
+          <td>1.29% + CHF 0.21 / txn</td>
+          <td class="no">Fresha owns it</td>
+          <td>Multi</td>
+        </tr>
+        <tr>
+          <td><strong>Treatwell</strong></td>
+          <td>~€35 / month</td>
+          <td class="no"><strong>35%</strong> on marketplace bookings</td>
+          <td class="yes">0%</td>
+          <td>2% on online prepayments</td>
+          <td class="no">Treatwell owns it</td>
+          <td>Multi</td>
+        </tr>
+        <tr>
+          <td><strong>SimplyBook.me</strong></td>
+          <td>$9.9–$59.9 / month<br><span style="color:var(--muted);font-size:.78rem">(booking limits apply)</span></td>
+          <td class="yes">0%</td>
+          <td class="yes">0%</td>
+          <td>Via Stripe / own</td>
+          <td class="no">SimplyBook owns it</td>
+          <td>Multi</td>
+        </tr>
+        <tr>
+          <td><strong>Setmore</strong></td>
+          <td>$9–$12 / month</td>
+          <td class="yes">0%</td>
+          <td class="yes">0%</td>
+          <td>2.6% + $0.10</td>
+          <td class="no">Setmore owns it</td>
+          <td>Limited</td>
+        </tr>
+        <tr>
+          <td><strong>Salonkee</strong><br><span style="color:var(--muted);font-size:.78rem">Popular in CH/BE/LU</span></td>
+          <td>€49 Start / €79 Plus / €109 Business<br><span style="color:var(--muted);font-size:.78rem">+€50/mo for Payments add-on · +~CHF 59/mo for Website Builder</span></td>
+          <td class="yes">0%</td>
+          <td class="yes">0%</td>
+          <td>Via Salonkee Payments add-on</td>
+          <td class="no">Salonkee owns it</td>
+          <td>FR, DE, NL, EN</td>
+        </tr>
+        <tr style="background: rgba(201,168,76,.06);">
+          <td><strong style="color:var(--accent)">Our Platform</strong></td>
+          <td class="us-cell"><strong>CHF 197 / month</strong><br><span style="color:var(--muted);font-size:.78rem">flat, all staff, all locations</span></td>
+          <td class="yes"><strong>0%</strong>, always</td>
+          <td class="yes"><strong>0%</strong>, always</td>
+          <td>Use existing TWINT / terminal</td>
+          <td class="yes"><strong>100% Gzim</strong></td>
+          <td class="us-cell">FR + EN + DE</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Where Our Platform Sits in the Market</h3>
+  <p style="margin-bottom:1rem">The nearest comparable subscription product is <strong>Salonkee</strong>, popular in French-speaking Switzerland, no commissions, purpose-built for salons. To match what our platform offers, a Salonkee subscription would cost:</p>
+
+  <div class="card-row">
+    <div class="card red">
+      <div class="big">€109</div>
+      <div class="label">Salonkee Business / month</div>
+      <div class="sublabel">Needed for marketing, advanced stats, loyalty, comparable feature depth</div>
+    </div>
+    <div class="card red">
+      <div class="big">€50</div>
+      <div class="label">Salonkee Payments add-on / month</div>
+      <div class="sublabel">Required for cancellation policy, no-show fees, online payments</div>
+    </div>
+    <div class="card red">
+      <div class="big">~CHF 59</div>
+      <div class="label">Salonkee Website Builder / month</div>
+      <div class="sublabel">Separate add-on for a bookable website (no multi-language)</div>
+    </div>
+    <div class="card red">
+      <div class="big">~CHF 220+</div>
+      <div class="label">Salonkee total / month</div>
+      <div class="sublabel">And still no trilingual support, no Swiss-hosted data, no owned codebase</div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:1rem">
+    <p><strong>Our platform at CHF 197/month is already below a comparable Salonkee stack</strong>, and includes what Salonkee cannot offer: FR/EN/DE, Azure Switzerland North hosting, full data ownership, and a codebase that belongs to Gzim.</p>
+  </div>
+
+  <h3>What the Commission Platforms Would Cost (for reference)</h3>
+  <p style="margin-bottom:.75rem;color:var(--muted);font-size:.82rem">Gzim's current platform is not Fresha or Treatwell. These figures are provided for market context only, to show what Gzim would pay if they ever moved to one of those platforms.</p>
+  <div class="card-row">
+    <div class="card">
+      <div class="big">20%</div>
+      <div class="label">Fresha, new client commission</div>
+      <div class="sublabel">CHF 7 minimum per new client. On 60 new clients/month at CHF 35 avg = CHF 420/month in commissions, forever.</div>
+    </div>
+    <div class="card">
+      <div class="big">35%</div>
+      <div class="label">Treatwell, first booking commission</div>
+      <div class="sublabel">40 marketplace bookings × CHF 35 × 35% = CHF 490/month just for being listed.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════ ROI -->
+
+
+
+<!-- ═══════════════════════════════════════════════ PRICING -->
+
+
+
+<!-- ═══════════════════════════════════════════════ ROADMAP -->
+
+
+
+<!-- ═══════════════════════════════════════════════ PITCH POINTS -->
+
+
+<script>
+  /* ── Tab navigation ──────────────────────────────────────── */
+  function show(id, el) {
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('nav.tabs a').forEach(a => a.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if (el) el.classList.add('active');
+    if (id === 'analytics') initAnalyticsCharts();
+  }
+
+  /* ── Pricing billing toggle ──────────────────────────────── */
+  function setBilling(mode) {
+    document.querySelectorAll('.price-m').forEach(el => el.style.display = mode === 'monthly' ? '' : 'none');
+    document.querySelectorAll('.price-a').forEach(el => el.style.display = mode === 'annual' ? '' : 'none');
+    document.getElementById('toggle-monthly').classList.toggle('active', mode === 'monthly');
+    document.getElementById('toggle-annual').classList.toggle('active', mode === 'annual');
+    document.getElementById('annual-note').style.display = mode === 'annual' ? '' : 'none';
+  }
+
+  /* ── Analytics charts (lazy init) ───────────────────────── */
+  var LANG = 'en';
+  var _analyticsInit = false, _subtabsWired = false;
+
+  // Muted, on-brand palette matching the live admin dashboard.
+  var P = ['#c8a24a','#6b8fb0','#8aa17a','#b07d5a','#9c7bb0','#5fb0a6'];
+  var GOLD = '#c8a24a', BLUE = '#6b8fb0', RED = '#dc2626';
+  var ML_EN = ['Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26','Apr 26','May 26','Jun 26'];
+  var ML_FR = ['juil. 25','août 25','sept. 25','oct. 25','nov. 25','déc. 25','janv. 26','févr. 26','mars 26','avr. 26','mai 26','juin 26'];
+
+  function initAnalyticsCharts() {
+    if (_analyticsInit) return;
+    _analyticsInit = true;
+
+    var fr = (LANG === 'fr');
+    var ML     = fr ? ML_FR : ML_EN;
+    var WD     = fr ? ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'] : ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    var LEAD   = fr ? ['Jour même','1–2 j','3–7 j','1–2 sem.','2 sem.+'] : ['Same day','1–2 d','3–7 d','1–2 wk','2 wk+'];
+    var STATUS = fr ? ['En attente','Terminé','Annulé'] : ['Pending','Completed','Cancelled'];
+    var TT = fr
+      ? {New:'Nouveaux',Returning:'Fidèles',Guests:'Invités',Registered:'Enregistrés',Hours:'Heures',Avg:'Panier moyen',Trend:'Tendance',Bookings:'Réservations'}
+      : {New:'New',Returning:'Returning',Guests:'Guests',Registered:'Registered',Hours:'Hours',Avg:'Avg ticket',Trend:'Trend',Bookings:'Bookings'};
+
+    Chart.defaults.font.family = 'system-ui,-apple-system,sans-serif';
+    Chart.defaults.font.size = 11;
+    Chart.defaults.color = '#888';
+    Chart.defaults.borderColor = '#2a2a2a';
+    function sc(extra) { return Object.assign({ticks:{color:'#888'},grid:{color:'#2a2a2a'}},extra||{}); }
+    function legend(on) { return {position:'bottom',labels:{boxWidth:10,font:{size:10},color:'#888',usePointStyle:true,pointStyle:'circle'}}; }
+    function mk(id, cfg) { var el=document.getElementById(id); return el ? new Chart(el, cfg) : null; }
+    function chf(v){ return 'CHF '+v.toLocaleString('fr-CH'); }
+
+    /* ═══════════ OVERVIEW ═══════════ */
+    var MD = [18500,19800,21200,22400,24100,23600,25800,24900,27200,28100,29400,30100];
+    var DL = (function(){var a=[];for(var i=29;i>=0;i--){var d=new Date(2026,5,30);d.setDate(d.getDate()-i);a.push(d.getDate()+'/'+(d.getMonth()+1));}return a;})();
+    var DD = [870,960,1050,820,940,1120,980,1060,830,970,1090,850,1200,960,1020,890,1150,1030,980,1110,850,1000,1070,1190,930,1050,1260,990,1110,1040];
+
+    var revChart = mk('aRevenueChart',{
+      type:'line',
+      data:{labels:ML,datasets:[{label:'CHF',data:MD,borderColor:GOLD,backgroundColor:'rgba(200,162,74,.1)',borderWidth:2,tension:.35,fill:true,pointRadius:0,pointHoverRadius:5}]},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false}},scales:{x:sc(),y:sc({beginAtZero:false,ticks:{color:'#888',callback:function(v){return chf(v);}}})}}
+    });
+    window.switchRev = function(p) {
+      if(p==='monthly'){revChart.data.labels=ML;revChart.data.datasets[0].data=MD;document.getElementById('abtn-monthly').classList.add('active');document.getElementById('abtn-daily').classList.remove('active');}
+      else{revChart.data.labels=DL;revChart.data.datasets[0].data=DD;document.getElementById('abtn-daily').classList.add('active');document.getElementById('abtn-monthly').classList.remove('active');}
+      revChart.update();
+    };
+
+    mk('aBarberChart',{type:'bar',
+      data:{labels:['Gzim','Ali','Klisman'],datasets:[{data:[420,285,170],backgroundColor:P,borderRadius:6}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:sc(),y:sc({beginAtZero:true})}}});
+
+    mk('aStatusChart',{type:'doughnut',
+      data:{labels:STATUS,datasets:[{data:[52,780,43],backgroundColor:['#f59e0b','#10b981','#dc2626'],borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:legend()}}});
+
+    mk('aLocationChart',{type:'doughnut',
+      data:{labels:['Rue de la Gare 15','Rue Dr Yersin 2'],datasets:[{data:[540,335],backgroundColor:[GOLD,BLUE],borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:legend()}}});
+
+    mk('aServiceChart',{type:'bar',
+      data:{labels:['Coupe + Barbe','Coupe','Barbe','Kids Cut','Coloration','Rasage'],datasets:[{label:'CHF',data:[8750,6300,3500,2100,1750,875],backgroundColor:GOLD,borderRadius:6}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:sc({beginAtZero:true,ticks:{color:'#888',callback:function(v){return chf(v);}}}),y:sc()}}});
+
+    var clients=[['Jean-Marc D.',18,630],['Marco F.',15,525],['Thomas M.',14,490],['Alex L.',12,420],['Chris A.',11,385],['Pierre M.',10,350],['Luca R.',9,315],['David M.',8,280],['François B.',8,280],['Stefan W.',7,245]];
+    document.getElementById('topClientsBody').innerHTML=clients.map(function(c,i){
+      return'<tr style="border-bottom:1px solid #2a2a2a"><td style="padding:.3rem .4rem;color:#555">'+(i+1)+'</td><td style="padding:.3rem .4rem">'+c[0]+'</td><td style="padding:.3rem .4rem;text-align:right;font-weight:600">'+c[1]+'</td><td style="padding:.3rem .4rem;text-align:right">'+c[2]+'</td></tr>';
+    }).join('');
+
+    var sched=[['09:00','Jean-Marc D.','Gzim'],['09:30','Alex L.','Ali'],['10:00','Marco F.','Gzim'],['10:15','Thomas M.','Klisman'],['10:30','Chris A.','Ali'],['11:00','Pierre M.','Gzim'],['11:30','Luca R.','Ali'],['14:00','David M.','Gzim'],['14:30','François B.','Klisman'],['15:00','Stefan W.','Gzim']];
+    document.getElementById('scheduleBody').innerHTML=sched.map(function(s){
+      return'<tr style="border-bottom:1px solid #2a2a2a"><td style="padding:.3rem .4rem;font-weight:500;white-space:nowrap">'+s[0]+'</td><td style="padding:.3rem .4rem">'+s[1]+'</td><td style="padding:.3rem .4rem;color:#888">'+s[2]+'</td></tr>';
+    }).join('');
+
+    /* ═══════════ OPERATIONS ═══════════ */
+    mk('opsCancelChart',{type:'line',
+      data:{labels:ML,datasets:[{label:'%',data:[6.2,5.8,5.5,5.1,4.9,5.3,4.7,4.9,4.4,4.8,4.6,4.9],borderColor:RED,backgroundColor:'rgba(220,38,38,.1)',borderWidth:2,tension:.35,fill:true,pointRadius:0,pointHoverRadius:5}]},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false}},scales:{x:sc(),y:sc({beginAtZero:true,ticks:{color:'#888',callback:function(v){return v+'%';}}})}}});
+
+    var HRS=['09h','10h','11h','12h','13h','14h','15h','16h','17h','18h'];
+    mk('opsHourChart',{type:'bar',
+      data:{labels:HRS,datasets:[
+        {label:'2025',data:[18,40,62,85,80,55,70,92,74,30],backgroundColor:BLUE,borderRadius:4},
+        {label:'2026',data:[24,52,78,104,96,66,82,110,88,38],backgroundColor:GOLD,borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:legend()},scales:{x:sc(),y:sc({beginAtZero:true})}}});
+
+    mk('opsWeekdayChart',{type:'bar',
+      data:{labels:WD,datasets:[
+        {label:'2025',data:[95,88,102,120,150,175,0],backgroundColor:BLUE,borderRadius:4},
+        {label:'2026',data:[110,102,120,140,175,205,0],backgroundColor:GOLD,borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:legend()},scales:{x:sc(),y:sc({beginAtZero:true})}}});
+
+    mk('opsLeadChart',{type:'bar',
+      data:{labels:LEAD,datasets:[{label:TT.Bookings,data:[120,240,320,140,55],backgroundColor:P,borderRadius:6}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:sc(),y:sc({beginAtZero:true})}}});
+
+    mk('opsWorkloadChart',{type:'bar',
+      data:{labels:['Gzim','Ali','Klisman'],datasets:[{label:TT.Hours,data:[312,205,120],backgroundColor:P,borderRadius:6}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:sc({beginAtZero:true}),y:sc()}}});
+
+    mk('opsUtilChart',{type:'bar',
+      data:{labels:['Gzim','Ali','Klisman'],datasets:[{label:'%',data:[86,71,58],backgroundColor:GOLD,borderRadius:6}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:sc({beginAtZero:true,max:100,ticks:{color:'#888',callback:function(v){return v+'%';}}}),y:sc()}}});
+
+    /* Heatmap, day × hour */
+    (function(){
+      var host=document.getElementById('opsHeatmap'); if(!host) return;
+      var days=WD;
+      var m=[[3,6,9,11,8,5,7,10,8,3],[2,5,8,10,7,4,6,9,7,2],[4,7,10,12,9,6,8,11,9,4],[4,8,11,13,10,6,9,12,10,4],[6,10,14,16,12,8,11,15,13,6],[8,13,17,19,14,10,14,18,16,8],[0,0,0,0,0,0,0,0,0,0]];
+      var max=19, html='<table class="heat-table"><thead><tr><th></th>';
+      HRS.forEach(function(h){ html+='<th>'+h+'</th>'; });
+      html+='</tr></thead><tbody>';
+      m.forEach(function(row,i){
+        html+='<tr><td class="heat-day">'+days[i]+'</td>';
+        row.forEach(function(n){ var a=n?(0.12+0.88*(n/max)).toFixed(2):0; html+='<td><div class="heat-cell" title="'+days[i]+', '+n+'" style="background:rgba(200,162,74,'+a+')"></div></td>'; });
+        html+='</tr>';
+      });
+      host.innerHTML=html+'</tbody></table>';
+    })();
+
+    /* ═══════════ CLIENTS ═══════════ */
+    mk('cliNewRetChart',{type:'bar',
+      data:{labels:ML,datasets:[
+        {label:TT.New,data:[40,42,38,45,44,48,52,49,55,58,60,62],backgroundColor:GOLD,borderRadius:6},
+        {label:TT.Returning,data:[30,34,38,40,45,44,50,52,58,60,64,68],backgroundColor:BLUE,borderRadius:6}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:legend()},scales:{x:sc({stacked:true}),y:sc({stacked:true,beginAtZero:true})}}});
+
+    mk('cliCityChart',{type:'bar',
+      data:{labels:['Morges','Lausanne','Préverenges','St-Prex','Tolochenaz','Denges','Échichens','Lonay'],datasets:[{label:TT.Bookings,data:[420,180,95,72,58,40,33,25],backgroundColor:P,borderRadius:6}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:sc({beginAtZero:true}),y:sc()}}});
+
+    mk('cliGuestChart',{type:'doughnut',
+      data:{labels:[TT.Guests,TT.Registered],datasets:[{data:[410,465],backgroundColor:[GOLD,BLUE],borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:legend()}}});
+
+    var winback=[['Marc D.','12 Apr 2026',9,315],['Ken B.','15 Mar 2026',11,420],['Sophie L.','28 Mar 2026',6,210],['Igor V.','21 Feb 2026',8,280],['Ana P.','02 Mar 2026',5,175],['Tom R.','09 Feb 2026',4,140]];
+    document.getElementById('winbackBody').innerHTML=winback.map(function(c){
+      return'<tr style="border-bottom:1px solid #2a2a2a"><td style="padding:.3rem .4rem">'+c[0]+'</td><td style="padding:.3rem .4rem;white-space:nowrap">'+c[1]+'</td><td style="padding:.3rem .4rem;text-align:right;font-weight:600">'+c[2]+'</td><td style="padding:.3rem .4rem;text-align:right">'+c[3]+'</td></tr>';
+    }).join('');
+
+    /* ═══════════ REVENUE ═══════════ */
+    mk('revAvgTicketChart',{type:'line',
+      data:{labels:ML,datasets:[
+        {label:TT.Avg,data:[33.2,33.5,33.8,34.1,34.0,34.4,34.6,34.5,34.9,35.1,35.3,35.6],borderColor:GOLD,backgroundColor:'rgba(200,162,74,.1)',borderWidth:2,tension:.35,fill:true,pointRadius:0,pointHoverRadius:5},
+        {label:TT.Trend,data:[33.3,33.5,33.7,33.9,34.1,34.3,34.5,34.7,34.9,35.1,35.3,35.5],borderColor:BLUE,borderDash:[6,4],borderWidth:2,pointRadius:0,fill:false}]},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:legend()},scales:{x:sc(),y:sc({beginAtZero:false,ticks:{color:'#888',callback:function(v){return chf(v);}}})}}});
+
+    mk('revVatChart',{type:'bar',
+      data:{labels:ML,datasets:[{label:'CHF',data:[1386,1483,1588,1678,1805,1767,1933,1865,2037,2105,2202,2254],backgroundColor:GOLD,borderRadius:6}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:sc(),y:sc({beginAtZero:true,ticks:{color:'#888',callback:function(v){return chf(v);}}})}}});
+
+    mk('revBarberChart',{type:'bar',
+      data:{labels:['Gzim','Ali','Klisman'],datasets:[{label:'CHF',data:[14700,9975,5950],backgroundColor:P,borderRadius:6}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:sc({beginAtZero:true,ticks:{color:'#888',callback:function(v){return chf(v);}}}),y:sc()}}});
+
+    /* ── Analytics sub-tabs (wire once): charts in a hidden panel lay out at
+          0×0, so resize each panel's charts the first time it is shown. ── */
+    if (!_subtabsWired) {
+      _subtabsWired = true;
+      var subtabs = document.querySelectorAll('#analytics-subtabs .subtab');
+      var panels = document.querySelectorAll('#analytics .sub-panel');
+      subtabs.forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var sub = btn.dataset.sub;
+          subtabs.forEach(function(b){ b.classList.toggle('active', b===btn); });
+          panels.forEach(function(p){ p.classList.toggle('hidden', p.dataset.sub!==sub); });
+          var vis = document.querySelector('#analytics .sub-panel[data-sub="'+sub+'"]');
+          if (vis) vis.querySelectorAll('canvas').forEach(function(c){ var ch=Chart.getChart(c); if(ch) ch.resize(); });
+        });
+      });
+    }
+  }
+
+  /* Re-draw every analytics chart in the current language (called on toggle). */
+  function rebuildCharts() {
+    if (!_analyticsInit) return;
+    document.querySelectorAll('#analytics canvas').forEach(function(c){ var ch=Chart.getChart(c); if(ch) ch.destroy(); });
+    _analyticsInit = false;
+    initAnalyticsCharts();
+    var vis = document.querySelector('#analytics .sub-panel:not(.hidden)');
+    if (vis) vis.querySelectorAll('canvas').forEach(function(c){ var ch=Chart.getChart(c); if(ch) ch.resize(); });
+  }
+</script>
+
+<!-- ═══════════════════════════════════════════════ FR / EN TOGGLE -->
+<script>
+(function () {
+  function norm(s){ return (s||'').replace(/\s+/g,' ').trim(); }
+
+  // French values are double-quoted JS strings; any HTML inside uses SINGLE-quoted
+  // attributes so nothing needs escaping. Keys are the English textContent.
+  var FR = {
+    // ── New live features (loyalty, SEO) ──
+    "Digital Loyalty Stamp Card New": "Carte de fidélité numérique <span class='badge badge-new'>Nouveau</span>",
+    "Every completed visit automatically earns a stamp, no app to download and no plastic card to lose. After 10 visits the client unlocks a reward that applies itself at the very next booking: they enter their email, see the discount before they confirm, and the total updates live. Each client gets a private personal card page and a branded email at every step, and a rewarded booking that is later cancelled refunds the reward automatically. Fully self-service, running on the booking data the platform already captures.": "Chaque visite terminée ajoute automatiquement un tampon, sans application à télécharger ni carte en plastique à perdre. Après 10 visites, le client débloque une récompense qui s'applique d'elle-même dès la réservation suivante : il saisit son e-mail, voit la remise avant de confirmer, et le total se met à jour en direct. Chaque client dispose d'une page de carte personnelle et privée et reçoit un e-mail à la charte du salon à chaque étape ; une réservation récompensée puis annulée restitue la récompense automatiquement. Entièrement en libre-service, basé sur les données de réservation que la plateforme capture déjà.",
+    "Built-In Trilingual SEO": "Référencement (SEO) trilingue intégré",
+    "The platform ships search-engine ready: a multilingual sitemap, hreflang tags that tell Google to serve the right language (FR/EN/DE) to the right client, Schema.org structured data for rich results, and per-page meta descriptions in all three languages. It is the technical groundwork that makes Gzim findable by the English- and German-speaking clients a French-only site never reaches, while an indexing switch keeps private staff areas out of search.": "La plateforme est prête pour les moteurs de recherche : un plan de site multilingue, des balises hreflang qui indiquent à Google de servir la bonne langue (FR/EN/DE) au bon client, des données structurées Schema.org pour des résultats enrichis, et des méta-descriptions par page dans les trois langues. C'est le socle technique qui rend Gzim visible auprès des clients anglophones et germanophones qu'un site en français seul n'atteint jamais, tandis qu'un interrupteur d'indexation garde les espaces privés du personnel hors des recherches.",
+    "Loyalty program": "Programme de fidélité",
+    "Digital stamp card, reward auto-applied at booking": "Carte à tampons numérique, récompense appliquée automatiquement à la réservation",
+    "Search engine optimisation (SEO)": "Référencement (SEO)",
+    "French only, no structured data": "Français uniquement, sans données structurées",
+    "Multilingual sitemap, hreflang, Schema.org rich results": "Plan de site multilingue, hreflang, résultats enrichis Schema.org",
+    // ── Header / nav ──
+    "Gzim Barber House, Platform Proposal": "Gzim Barber House, Proposition de plateforme",
+    "Sales pitch reference · Pricing · ROI · Competitive analysis · Last updated: July 2026": "Référence commerciale · Tarifs · ROI · Analyse concurrentielle · Dernière mise à jour : juillet 2026",
+    "Overview": "Vue d'ensemble",
+    "Features": "Fonctionnalités",
+    "Analytics": "Analytique",
+    "vs. Current Website": "vs. Site actuel",
+    "ROI Scenarios": "Scénarios ROI",
+    "Our Pricing": "Nos tarifs",
+    "Roadmap": "Feuille de route",
+    "Key Pitch Points": "Arguments clés",
+
+    // ── Overview ──
+    "Who I Am": "Qui je suis",
+    "I am a Microsoft Certified Engineer specialised in scalable web applications. I build custom platforms for small and medium businesses, not off-the-shelf templates, but purpose-built systems owned entirely by the client, hosted in Switzerland, with no third-party dependency on the critical path. Before writing a single line of code for this platform, I spent time understanding how Gzim Barber House operates: the booking volume, the language mix of your clients, the invoicing requirements under Swiss law, and the daily friction that costs you time. What you are looking at is the result.": "Je suis <strong>ingénieur certifié Microsoft</strong>, spécialisé dans les applications web évolutives. Je conçois des plateformes sur mesure pour les PME, pas des modèles génériques, mais des systèmes construits spécifiquement, dont le client est entièrement propriétaire, hébergés en Suisse, sans dépendance à un tiers sur le chemin critique. Avant d'écrire la moindre ligne de code, j'ai pris le temps de comprendre le fonctionnement de Gzim Barber House : le volume de réservations, les langues de vos clients, les exigences de facturation selon le droit suisse, et les frictions quotidiennes qui vous coûtent du temps. Ce que vous avez sous les yeux en est le résultat.",
+    "You never touch anything technical. The platform is professionally managed for you end to end. Hosting, security patches, backups, uptime monitoring, bug fixes, and improvements are all handled by a Microsoft Certified Engineer. You run the barbershop; the website runs itself, and someone qualified is watching it 24/7. That is a level of ongoing care a booking widget or a WordPress plugin simply does not come with.": "<strong>Vous ne touchez jamais à rien de technique.</strong> La plateforme est gérée de bout en bout pour vous. Hébergement, correctifs de sécurité, sauvegardes, surveillance de la disponibilité, corrections de bugs et améliorations sont tous pris en charge par un ingénieur certifié Microsoft. Vous gérez le salon ; le site tourne tout seul, et une personne qualifiée le surveille 24/7. C'est un niveau de suivi qu'un widget de réservation ou un plugin WordPress n'offre tout simplement pas.",
+    "What I Built": "Ce que j'ai construit",
+    "A complete, custom-built online booking platform tailored specifically for Gzim Barber House, deployed today on Microsoft Azure inside Switzerland, and ready to go live. The platform is owned, branded, and operated exclusively for you.": "Une plateforme de réservation en ligne complète et sur mesure, conçue spécifiquement pour Gzim Barber House, déjà déployée sur Microsoft Azure en Suisse et prête à être mise en ligne. La plateforme vous appartient, est à votre marque et exploitée exclusivement pour vous.",
+    "Languages supported": "Langues prises en charge",
+    "French · English · GermanAuto-detected, instant switch": "Français · Anglais · Allemand<br>Détection automatique, changement instantané",
+    "Commission on bookings": "Commission sur les réservations",
+    "No commissions, ever. Every CHF goes to Gzim.": "Zéro commission, jamais. Chaque franc revient à Gzim.",
+    "Data ownership": "Propriété des données",
+    "All client data, invoices, and booking history belong to Gzim, not a third party.": "Toutes les données clients, factures et historiques de réservation appartiennent à Gzim, pas à un tiers.",
+    "Online bookings": "Réservations en ligne",
+    "Clients book any time, any device, in their language, without calling.": "Vos clients réservent à toute heure, sur tout appareil, dans leur langue, sans téléphoner.",
+    "The Situation": "La situation",
+    "The gzim-barberhouse.ch website appears to be a custom-built platform from several years ago, most likely WordPress + WooCommerce with a booking plugin. It works, but it was built for a simpler time and a smaller operation. It is French only, has no customer accounts, limits booking to the current week, and cannot handle rescheduling or cancellations without a phone call.": "Le site <strong>gzim-barberhouse.ch</strong> semble être une plateforme sur mesure conçue il y a plusieurs années, très probablement WordPress + WooCommerce avec un plugin de réservation. Il fonctionne, mais il a été pensé pour une époque plus simple et une activité plus petite. Il est uniquement en français, sans comptes clients, limite les réservations à la semaine en cours, et ne gère ni les modifications ni les annulations sans un appel téléphonique.",
+    "The real question is not cost, it is what the current platform cannot do. A client who wants to book 3 weeks from now cannot. A client who wants to reschedule must call during opening hours. A German or English speaker who finds the salon on Google cannot navigate the booking. These are bookings and clients that quietly go elsewhere, with no trace in any report.": "<strong>La vraie question n'est pas le coût, c'est ce que la plateforme actuelle ne peut pas faire.</strong> Un client qui veut réserver dans 3 semaines ne le peut pas. Un client qui veut se replanifier doit appeler pendant les heures d'ouverture. Un client germanophone ou anglophone qui trouve le salon sur Google ne parvient pas à réserver. Ce sont des réservations et des clients qui partent discrètement ailleurs, sans laisser la moindre trace dans un rapport.",
+    "The Solution": "La solution",
+    "Our platform replaces the third-party booking widget with an owned, branded system that gives Gzim full control over their schedule, staff, clients, and revenue, at a flat monthly rate with zero commissions.": "Notre plateforme remplace le widget de réservation tiers par un système à votre marque, dont vous êtes propriétaire, qui donne à Gzim un contrôle total sur son planning, son équipe, ses clients et ses revenus, pour un tarif mensuel fixe et sans commission.",
+    "One sentence: Replace an ageing custom site that can only book this week and requires a phone call to change anything, with a trilingual platform that handles booking, rescheduling, invoicing, and three languages.": "<strong>En une phrase :</strong> Remplacer un site sur mesure vieillissant, qui ne réserve que la semaine en cours et exige un appel pour tout changement, par une plateforme trilingue qui gère la réservation, la replanification, la facturation et trois langues.",
+
+    // ── Analytics ──
+    "Analytics & Reporting": "Analytique & Rapports",
+    "Every booking and payment is stored in your own database. The admin dashboard surfaces it in real time across four views, Overview, Operations, Clients, and Revenue. Figures below are illustrative sample data.": "Chaque réservation et paiement est stocké dans votre propre base de données. Le tableau de bord l'affiche en temps réel à travers quatre vues, Vue d'ensemble, Opérations, Clients et Revenu. <span style='color:var(--muted);font-style:italic'>Les chiffres ci-dessous sont des données d'exemple à titre indicatif.</span>",
+    "Operations": "Opérations",
+    "Clients": "Clients",
+    "Revenue": "Revenu",
+    "Revenue collected": "Revenu encaissé",
+    "780 completed appts": "780 rdv terminés",
+    "Potential revenue": "Revenu potentiel",
+    "52 pending appts": "52 rdv en attente",
+    "Total appointments": "Total rendez-vous",
+    "this month": "ce mois-ci",
+    "Completion rate": "Taux de complétion",
+    "43 cancelled": "43 annulés",
+    "Revenue over time": "Revenu dans le temps",
+    "Monthly": "Mensuel",
+    "Daily": "Journalier",
+    "Bookings per barber": "Réservations par barbier",
+    "Status breakdown": "Répartition des statuts",
+    "By location": "Par salon",
+    "Revenue by service (top 6)": "Revenu par service (top 6)",
+    "Top clients by spend": "Meilleurs clients (dépenses)",
+    "Today's schedule": "Planning du jour",
+    "Time": "Heure",
+    "Barber": "Barbier",
+    "Busiest day": "Jour le plus actif",
+    "Saturday": "Samedi",
+    "Peak hour": "Heure de pointe",
+    "Avg lead time": "Délai de réservation moyen",
+    "4.6 days": "4.6 <span class='unit'>jours</span>",
+    "Cancellation rate": "Taux d'annulation",
+    "Cancellation rate (12 months)": "Taux d'annulation (12 mois)",
+    "Hourly traffic · 2025 vs 2026": "Affluence horaire · 2025 vs 2026",
+    "Traffic by day & hour": "Affluence par jour & heure",
+    "Cumulative bookings by weekday and hour.": "Réservations cumulées par jour de la semaine et heure.",
+    "less": "moins",
+    "more": "plus",
+    "Bookings by weekday · 2025 vs 2026": "Réservations par jour · 2025 vs 2026",
+    "Booking lead time": "Délai de réservation",
+    "Workload per barber, booked hours (90 d)": "Charge par barbier, heures réservées (90 j)",
+    "Utilisation per barber (est., 90 d)": "Taux d'occupation par barbier (est., 90 j)",
+    "Unique clients": "Clients uniques",
+    "Retention rate": "Taux de fidélisation",
+    "Avg ticket": "Panier moyen",
+    "Clients to win back": "Clients à relancer",
+    "New vs. returning clients (12 months)": "Nouveaux vs. clients fidèles (12 mois)",
+    "Bookings by city (top 8)": "Réservations par ville (top 8)",
+    "Guests vs. registered": "Invités vs. enregistrés",
+    "Win-back list, no visit in 60+ days": "Liste de relance, sans visite depuis 60 j+",
+    "Last visit": "Dernière visite",
+    "This is exactly the list the proposed win-back coupon automation would email (see Roadmap).": "C'est exactement la liste que l'automatisation de coupons de relance proposée enverrait par e-mail (voir Feuille de route).",
+    "Forecast (pipeline)": "Prévisionnel (pipeline)",
+    "52 upcoming appts": "52 rdv à venir",
+    "VAT collected": "TVA encaissée",
+    "8.1% Swiss VAT": "TVA suisse 8.1%",
+    "Average ticket over time (12 months)": "Panier moyen dans le temps (12 mois)",
+    "VAT collected per month": "TVA encaissée par mois",
+    "Revenue per barber": "Revenu par barbier",
+    "vs. WooCommerce: The current platform gives order totals. This tells you which barber generates the most revenue, which service has the best margin, when your salon is busiest, how many clients are slipping away, and the VAT owed at period end. Updated every time a booking completes.": "<strong>vs. WooCommerce :</strong> La plateforme actuelle donne des totaux de commandes. Celle-ci vous dit quel barbier génère le plus de revenu, quel service a la meilleure marge, quand votre salon est le plus fréquenté, combien de clients vous échappent, et la TVA due en fin de période. Mis à jour à chaque réservation terminée.",
+
+    // ── Features ──
+    "Platform Features, What Is Built and Live Today": "Fonctionnalités de la plateforme, ce qui est construit et en ligne aujourd'hui",
+    "Full Admin Dashboard": "Tableau de bord d'administration complet",
+    "Manage services, prices, staff, locations, opening hours, site text, themes, and all appointments from one secure admin panel. No third-party logins needed.": "Gérez services, tarifs, équipe, salons, horaires, textes du site, thèmes et tous les rendez-vous depuis un seul panneau d'administration sécurisé. Aucun identifiant tiers requis.",
+    "Real-Time Online Booking": "Réservation en ligne en temps réel",
+    "Clients choose location → service → barber → available slot. Slot is immediately blocked to prevent double-booking. Works 24/7 on any device.": "Le client choisit salon → service → barbier → créneau disponible. Le créneau est immédiatement bloqué pour éviter les doublons. Fonctionne 24/7 sur tout appareil.",
+    "Three Languages (FR / EN / DE)": "Trois langues (FR / EN / DE)",
+    "Full translation of the entire site: menus, booking flow, emails, legal pages, error messages. Instant switch with the language selector. Morges has a large English and German-speaking population (Expats, EPFL, international companies).": "Traduction complète de tout le site : menus, parcours de réservation, e-mails, pages légales, messages d'erreur. Changement instantané via le sélecteur de langue. Morges compte une importante population anglophone et germanophone (expatriés, EPFL, entreprises internationales).",
+    "Customer Accounts + Google Sign-In": "Comptes clients + connexion Google",
+    "Clients register or sign in with Google. They see their full appointment history, can reschedule or cancel (up to 24h before), and re-book past services in two clicks.": "Vos clients s'inscrivent ou se connectent avec Google. Ils voient tout leur historique de rendez-vous, peuvent replanifier ou annuler (jusqu'à 24 h avant) et re-réserver un service passé en deux clics.",
+    "Automatic VAT-Compliant Invoicing": "Facturation automatique conforme à la TVA",
+    "An invoice is generated automatically for every booking. Swiss VAT (8.1%) is calculated and shown separately. Invoices are numbered sequentially, stored in the system, and can be downloaded by clients. Required by Swiss accounting law (Art. 958f CO).": "Une facture est générée automatiquement pour chaque réservation. La TVA suisse (8.1%) est calculée et indiquée séparément. Les factures sont numérotées séquentiellement, stockées dans le système et téléchargeables par le client. Exigé par le droit comptable suisse (art. 958f CO).",
+    "Multi-Barber Scheduling": "Planning multi-barbiers",
+    "Each barber has individual weekly working hours per location, plus specific time-off blocks (holidays, sick days). The booking system only shows slots when that barber is actually available.": "Chaque barbier a ses propres horaires hebdomadaires par salon, plus des absences spécifiques (vacances, maladie). Le système ne propose des créneaux que lorsque le barbier est réellement disponible.",
+    "Multi-Location Support": "Prise en charge multi-salons",
+    "Each location has its own address, phone number, opening hours, embedded Google Map, and barber roster. Clients choose their preferred salon at the start of the booking flow.": "Chaque salon a sa propre adresse, son téléphone, ses horaires, sa carte Google intégrée et son équipe de barbiers. Le client choisit son salon préféré au début du parcours de réservation.",
+    "Automated Booking Confirmation Email": "E-mail de confirmation automatique",
+    "Sent automatically on every booking via Gmail SMTP. Includes a .ics calendar invite (Apple Calendar / Google Calendar compatible) and the PDF invoice as attachments. Rendered in the client's language (FR/EN/DE).": "Envoyé automatiquement à chaque réservation via Gmail SMTP. Inclut une invitation agenda .ics (compatible Apple Calendar / Google Calendar) et la facture PDF en pièce jointe. Rédigé dans la langue du client (FR/EN/DE).",
+    "3 Premium Visual Themes": "3 thèmes visuels premium",
+    "Midnight Gold (dark luxury), Photo Hero (image-driven), Monogram Luxury (editorial). Switchable from the admin in one click with no developer needed.": "Midnight Gold (luxe sombre), Photo Hero (axé image), Monogram Luxury (éditorial). Interchangeables depuis l'admin en un clic, sans développeur.",
+    "GDPR / Swiss DSG Compliance": "Conformité GDPR / nLPD suisse",
+    "Privacy policies in all 3 languages with correct legal bases (legitimate interest, contract). Session recording disclosed. Data hosted in Azure Switzerland North, fully GDPR and nLPD compliant.": "Politiques de confidentialité dans les 3 langues avec les bonnes bases légales (intérêt légitime, contrat). Enregistrement de session divulgué. Données hébergées sur Azure Switzerland North, pleinement conforme GDPR et nLPD.",
+    "Error Monitoring + Session Replay": "Surveillance des erreurs + relecture de session",
+    "Sentry monitors the live site 24/7. If a client hits an error during booking, we see it before they complain. Session replays let us reproduce and fix bugs within hours, not days.": "Sentry surveille le site en direct 24/7. Si un client rencontre une erreur pendant la réservation, nous la voyons avant qu'il ne se plaigne. La relecture de session nous permet de reproduire et corriger les bugs en heures, pas en jours.",
+    "Swiss Hosting (Azure Switzerland North)": "Hébergement suisse (Azure Switzerland North)",
+    "All data, client info, invoices, booking history, is stored in Switzerland. Compliant with Swiss data protection law. Not on a shared US server.": "Toutes les données, infos clients, factures, historique, sont stockées en Suisse. Conforme à la loi suisse sur la protection des données. Pas sur un serveur américain mutualisé.",
+    "Modern, Mobile-First Design": "Design moderne, pensé mobile d'abord",
+    "A fast, app-like experience that is tested and polished on PC, Android, and iPhone. The booking flow builds the client's selection in real time, phone numbers are tap-to-call, and the whole site adapts cleanly to every screen size. Most clients book on their phone, the site is built for that first.": "Une expérience rapide, comme une app, testée et peaufinée sur PC, Android et iPhone. Le parcours de réservation construit la sélection du client en temps réel, les numéros de téléphone sont cliquables pour appeler, et tout le site s'adapte proprement à chaque taille d'écran. La plupart des clients réservent sur leur téléphone, le site est conçu pour ça avant tout.",
+    "Client Reviews Showcase": "Vitrine des avis clients",
+    "Your real Google reviews (5.0 ★, 250+) are featured on the home page in an elegant carousel, and a built-in admin manager lets you curate which testimonials appear. Social proof turns first-time visitors into bookings.": "Vos vrais avis Google (5.0 ★, 250+) sont mis en avant sur la page d'accueil dans un carrousel élégant, et un gestionnaire intégré vous laisse choisir quels témoignages apparaissent. La preuve sociale transforme les nouveaux visiteurs en réservations.",
+    "Barber Profiles & Photos": "Profils & photos des barbiers",
+    "Each barber has a photo, bio, and calendar colour. Clients see who will be cutting their hair while booking, a personal, trust-building touch that a generic widget cannot offer. Photos are stored securely in Swiss Azure storage.": "Chaque barbier a une photo, une bio et une couleur d'agenda. Le client voit qui va lui couper les cheveux pendant qu'il réserve, une touche personnelle et rassurante qu'un widget générique ne peut pas offrir. Les photos sont stockées en toute sécurité sur le stockage Azure suisse.",
+    "Effortless Staff & Schedule Management": "Gestion sans effort de l'équipe & des plannings",
+    "Add or remove a barber in seconds, assign them to one or both salons, set their weekly hours per location, and block holidays or sick days, the booking calendar updates automatically so no one gets booked when they're off. Scaling the team or opening a third location needs no developer.": "Ajoutez ou retirez un barbier en quelques secondes, affectez-le à un salon ou aux deux, définissez ses horaires hebdomadaires par salon et bloquez vacances ou jours de maladie, le calendrier de réservation se met à jour automatiquement pour que personne ne soit réservé quand il est absent. Agrandir l'équipe ou ouvrir un troisième salon ne nécessite aucun développeur.",
+    "Full Change History (Audit Log)": "Historique complet des modifications (journal d'audit)",
+    "Every change, a booking rescheduled, a status updated, a price edited, is recorded with who did it, when, and the before/after values. Complete accountability across staff, and a clear trail for any dispute or question.": "Chaque modification, un rendez-vous replanifié, un statut changé, un tarif modifié, est enregistrée avec l'auteur, la date et les valeurs avant/après. Une traçabilité complète au sein de l'équipe, et une piste claire en cas de litige ou de question.",
+    "Audit-Safe Invoice Voiding": "Annulation de factures traçable",
+    "Invoices are legal records, so they are never silently deleted. A wrong invoice is voided (and can be restored), keeping a clean, tamper-evident financial history that your fiduciaire and Swiss law both expect.": "Les factures sont des documents légaux : elles ne sont jamais supprimées en silence. Une facture erronée est annulée (et peut être restaurée), conservant un historique financier propre et infalsifiable, tel que votre fiduciaire et le droit suisse l'exigent.",
+
+    // ── vs Current ──
+    "Our Platform vs. gzim-barberhouse.ch (Current Site)": "Notre plateforme vs. gzim-barberhouse.ch (site actuel)",
+    "Side-by-side comparison of what exists today versus what our platform delivers. Based on a direct analysis of the live current website.": "Comparaison côte à côte de ce qui existe aujourd'hui et de ce que notre plateforme apporte. Basé sur une analyse directe du site actuel en ligne.",
+    "Feature": "Fonctionnalité",
+    "gzim-barberhouse.ch (current)": "gzim-barberhouse.ch (actuel)",
+    "Our Platform": "Notre plateforme",
+    "Features both platforms offer": "Fonctionnalités présentes sur les deux",
+    "Same feature, improved on our platform": "Même fonctionnalité, améliorée chez nous",
+    "Only available on our platform": "Uniquement sur notre plateforme",
+    "Online booking": "<strong>Réservation en ligne</strong>",
+    "Yes": "Oui",
+    "No": "Non",
+    "Automatic invoicing + Swiss VAT": "<strong>Facturation automatique + TVA suisse</strong>",
+    "Multi-location support": "<strong>Prise en charge multi-salons</strong>",
+    "Languages": "<strong>Langues</strong>",
+    "French only": "Français uniquement",
+    "Advance booking window": "<strong>Fenêtre de réservation à l'avance</strong>",
+    "Current week only": "Semaine en cours uniquement",
+    "Weeks or months ahead": "Des semaines ou des mois à l'avance",
+    "Per-barber availability": "<strong>Disponibilité par barbier</strong>",
+    "Current week": "Semaine en cours",
+    "Unlimited horizon, configurable": "Horizon illimité, configurable",
+    "Booking confirmation email": "<strong>E-mail de confirmation</strong>",
+    "Generic receipt": "Reçu générique",
+    "Branded + .ics + PDF, in client's language": "À votre marque + .ics + PDF, dans la langue du client",
+    "Reschedule / cancel": "<strong>Replanifier / annuler</strong>",
+    "Phone only": "Téléphone uniquement",
+    "Self-service (up to 24h before)": "En libre-service (jusqu'à 24 h avant)",
+    "Admin control panel": "<strong>Panneau d'administration</strong>",
+    "Custom dashboard: bookings, staff, KPIs, theme": "Tableau de bord sur mesure : réservations, équipe, KPI, thème",
+    "Customer accounts": "<strong>Comptes clients</strong>",
+    "Yes, history, rebooking, preferences": "Oui, historique, re-réservation, préférences",
+    "Google Sign-In": "<strong>Connexion Google</strong>",
+    "Barber time-off management": "<strong>Gestion des absences des barbiers</strong>",
+    "Yes, blocks slots automatically": "Oui, bloque les créneaux automatiquement",
+    "Custom visual themes": "<strong>Thèmes visuels personnalisés</strong>",
+    "Fixed design": "Design figé",
+    "3 premium themes, admin-switchable": "3 thèmes premium, changeables en admin",
+    "Analytics & reporting": "<strong>Analytique & rapports</strong>",
+    "Basic order totals": "Totaux de commandes basiques",
+    "Revenue trends, barber performance, top clients, service revenue": "Tendances de revenu, performance des barbiers, meilleurs clients, revenu par service",
+    "Data ownership ": "Propriété des données",
+    "Third-party host": "Hébergeur tiers",
+    "100% owned by Gzim": "100% propriété de Gzim",
+    "Data location": "<strong>Localisation des données</strong>",
+    "Unknown": "Inconnue",
+    "GDPR / DSG privacy policies": "<strong>Politiques de confidentialité GDPR / nLPD</strong>",
+    "None found": "Aucune trouvée",
+    "Full (FR/EN/DE)": "Complètes (FR/EN/DE)",
+    "Error monitoring": "<strong>Surveillance des erreurs</strong>",
+    "Session replay": "<strong>Relecture de session</strong>",
+    "Mobile-first responsive design": "<strong>Design responsive pensé mobile d'abord</strong>",
+    "Basic": "Basique",
+    "Tested on PC, Android & iPhone": "Testé sur PC, Android & iPhone",
+    "Client reviews showcase": "<strong>Vitrine des avis clients</strong>",
+    "Google 5.0 ★ carousel, admin-curated": "Carrousel Google 5.0 ★, géré en admin",
+    "Barber profiles & photos": "<strong>Profils & photos des barbiers</strong>",
+    "Photo + bio shown while booking": "Photo + bio affichées pendant la réservation",
+    "Audit log / change history": "<strong>Journal d'audit / historique des modifications</strong>",
+    "Every change tracked (who / when / what)": "Chaque changement tracé (qui / quand / quoi)",
+    "Bottom line: The current website is a brochure with a third-party booking widget attached. Our platform is a fully integrated business operating system, booking, staff, invoicing, clients, and data, all under Gzim's control, in 3 languages, with no commissions.": "<strong>En résumé :</strong> Le site actuel est une brochure avec un widget de réservation tiers greffé dessus. Notre plateforme est un véritable système d'exploitation d'entreprise, réservation, équipe, facturation, clients et données, le tout sous le contrôle de Gzim, en 3 langues, sans commission.",
+
+    // ── ROI ──
+    "ROI, Value of the Upgrade": "ROI, la valeur de la mise à niveau",
+    "Assumptions: 2 locations in Morges · ~4 barbers · CHF 35 average ticket · ~875 bookings/month (inferred from real WooCommerce transaction velocity, see data note below) · ~7.5% of bookings (~65/month) involve a phone call to change or cancel · Current platform limits booking to the current week only. ROI is measured against the status quo, what Gzim gains by upgrading, regardless of what they currently pay.": "<strong>Hypothèses :</strong> 2 salons à Morges · ~4 barbiers · panier moyen CHF 35 · <strong>~875 réservations/mois</strong> (déduit du rythme réel des transactions WooCommerce, voir la note ci-dessous) · ~7.5% des réservations (~65/mois) impliquent un appel pour modifier ou annuler · La plateforme actuelle limite la réservation à la semaine en cours. Le ROI est mesuré par rapport au <em>statu quo</em>, ce que Gzim gagne en passant à la mise à niveau, indépendamment de ce qu'il paie aujourd'hui.",
+    "Data note, 875 bookings/month: WooCommerce assigns sequential order numbers to all transactions. By comparing order numbers from real bookings at Gzim sampled over 30 months (Jan 2024 → Jun 2026), we can calculate the order velocity for each interval. Current run rate: ~29 orders/day = ~880/month. Applying a 5% discount for test/cancelled orders gives a working estimate of ~875 completed bookings/month. Business has roughly doubled since early 2024 (~440/month), with a clear inflection point in Q1 2025 (likely coinciding with the second location opening). The main salon has 2 bookable chairs; at ~7 clients/chair/day that accounts for ~14 bookings at location 1, with the remaining ~15/day at location 2, consistent with a similar 2-chair setup there.": "<strong>Note de données, 875 réservations/mois :</strong> WooCommerce attribue des numéros de commande séquentiels à toutes les transactions. En comparant les numéros de commande de vraies réservations chez Gzim échantillonnées sur 30 mois (janv. 2024 → juin 2026), on peut calculer le rythme des commandes sur chaque intervalle. Rythme actuel : ~29 commandes/jour = ~880/mois. En retirant 5% pour les commandes test/annulées, on obtient une estimation de travail de <strong>~875 réservations terminées/mois</strong>. L'activité a environ doublé depuis début 2024 (~440/mois), avec un point d'inflexion net au T1 2025 (coïncidant probablement avec l'ouverture du second salon). Le salon principal a 2 fauteuils réservables ; à ~7 clients/fauteuil/jour, cela représente ~14 réservations au salon 1, les ~15/jour restantes au salon 2, cohérent avec une configuration similaire à 2 fauteuils.",
+    "Time Saved on Booking Changes, The Hidden Cost Nobody Counts": "Temps gagné sur les changements de réservation, le coût caché que personne ne compte",
+    "Every cancellation or reschedule today requires a phone call: the client calls, a staff member or the owner answers (or calls back), looks up the slot, finds an alternative, confirms, and updates the system. That is 3 minutes of productive time per interaction, while a barber is cutting hair and the phone should not be ringing.": "Aujourd'hui, chaque annulation ou replanification exige un appel : le client téléphone, un employé ou le patron répond (ou rappelle), cherche le créneau, trouve une alternative, confirme et met à jour le système. Cela fait 3 minutes de temps productif par interaction, pendant qu'un barbier coupe des cheveux et que le téléphone ne devrait pas sonner.",
+    "Booking changes / month by phone": "Changements de réservation / mois par téléphone",
+    "7.5% of 875 bookings": "7.5% de 875 réservations",
+    "Average per phone interaction": "Moyenne par appel",
+    "Find client → check schedule → confirm → update system": "Trouver le client → vérifier l'agenda → confirmer → mettre à jour",
+    "Owner/staff time lost per month": "Temps patron/employé perdu par mois",
+    "65 interactions × 3 min = 195 min, during service hours when the phone shouldn't ring": "65 interactions × 3 min = 195 min, pendant les heures de service, quand le téléphone ne devrait pas sonner",
+    "Phone calls with our platform": "Appels avec notre plateforme",
+    "Clients reschedule or cancel themselves online, up to 24h before. Slot reopens immediately for someone else.": "Les clients replanifient ou annulent eux-mêmes en ligne, jusqu'à 24 h avant. Le créneau se rouvre immédiatement pour quelqu'un d'autre.",
+    "Value of reclaimed time: 3.25 hours/month × CHF 50 (owner's effective hourly rate) = CHF 165/month. That is 45 minutes per week of scheduling interruptions, during service hours, eliminated entirely.": "<strong>Valeur du temps récupéré :</strong> 3.25 heures/mois × CHF 50 (taux horaire effectif du patron) = <strong>CHF 165/mois</strong>. Soit 45 minutes par semaine d'interruptions de planning, pendant les heures de service, entièrement éliminées.",
+    "Predictable Income & a Calmer Schedule": "Un revenu prévisible & un planning plus serein",
+    "Today the calendar only fills one week at a time, so every Monday starts near-empty and the week depends on walk-ins and same-day calls. When clients can book weeks or months ahead, the schedule fills further out, the owner and each barber can see next week and next month already taking shape.": "Aujourd'hui, l'agenda ne se remplit qu'une semaine à la fois : chaque lundi démarre quasi vide et la semaine dépend des passages spontanés et des appels du jour. Quand les clients peuvent réserver des semaines ou des mois à l'avance, le planning se remplit plus loin, le patron et chaque barbier voient la semaine et le mois prochains déjà prendre forme.",
+    "Current visibility of the book": "Visibilité actuelle de l'agenda",
+    "Nothing beyond this week, income and staffing are guesswork past Sunday.": "Rien au-delà de cette semaine, revenu et personnel relèvent de la devinette passé dimanche.",
+    "Visibility with our platform": "Visibilité avec notre plateforme",
+    "Appointments land far in advance, so the calendar is partly filled before the week even starts.": "Les rendez-vous arrivent bien à l'avance : l'agenda est déjà partiellement rempli avant même le début de la semaine.",
+    "Plan ahead": "Anticiper",
+    "Staffing, holidays, life": "Personnel, congés, vie perso",
+    "Set time off and staffing around a book you can actually see, not around surprises.": "Planifiez congés et effectifs autour d'un agenda que vous voyez vraiment, pas autour des surprises.",
+    "A booking made three weeks out is revenue you can already count on. Predictable demand means fewer empty chairs, less feast-or-famine, and the ability to plan staff hours and personal time around a schedule that is already partly booked, instead of reacting to whoever calls this morning.": "<strong>Une réservation prise trois semaines à l'avance est un revenu sur lequel vous pouvez déjà compter.</strong> Une demande prévisible, c'est moins de fauteuils vides, moins d'alternance entre trop et pas assez, et la possibilité de planifier les heures de l'équipe et votre temps personnel autour d'un agenda déjà partiellement réservé, au lieu de réagir à qui appelle ce matin.",
+    "Low adoption. Clients stick to calling. Only a few EN/DE clients convert.": "Faible adoption. Les clients continuent d'appeler. Seuls quelques clients EN/DE convertissent.",
+    "Platform fee": "Abonnement plateforme",
+    "Phone booking changes eliminated (50%)": "Changements par téléphone éliminés (50%)",
+    "Advance booking window (3 extra apts/mo)": "Réservation à l'avance (3 rdv suppl./mois)",
+    "EN/DE clients converted (+2 apts/mo)": "Clients EN/DE convertis (+2 rdv/mois)",
+    "No-show reduction (.ics invite, −1.5% of 875)": "Réduction des absences (invitation .ics, −1.5% de 875)",
+    "Net monthly gain": "Gain net mensuel",
+    "Annual: +CHF 6,192 · Payback: month 1": "<strong style='color:var(--red)'>Annuel : +CHF 6'192</strong> · Rentabilisé : mois 1",
+    "Good adoption. Self-service becomes the norm. EN/DE clients find the site and convert steadily.": "Bonne adoption. Le libre-service devient la norme. Les clients EN/DE trouvent le site et convertissent régulièrement.",
+    "Phone booking changes eliminated (80%)": "Changements par téléphone éliminés (80%)",
+    "Advance booking window (+8 apts/mo)": "Réservation à l'avance (+8 rdv/mois)",
+    "EN/DE clients converted (+7 apts/mo)": "Clients EN/DE convertis (+7 rdv/mois)",
+    "No-show reduction (.ics invite, −3% of 875)": "Réduction des absences (invitation .ics, −3% de 875)",
+    "Repeat bookings via client accounts": "Réservations répétées via les comptes clients",
+    "Annual: +CHF 20,616": "<strong style='color:var(--accent)'>Annuel : +CHF 20'616</strong>",
+    "Strong adoption. The trilingual site becomes Gzim's main growth driver in the region.": "Forte adoption. Le site trilingue devient le principal moteur de croissance de Gzim dans la région.",
+    "Phone booking changes fully eliminated": "Changements par téléphone entièrement éliminés",
+    "Advance booking window (+15 apts/mo)": "Réservation à l'avance (+15 rdv/mois)",
+    "EN/DE clients converted (+12 apts/mo)": "Clients EN/DE convertis (+12 rdv/mois)",
+    "No-show reduction (.ics invite, −5% of 875)": "Réduction des absences (invitation .ics, −5% de 875)",
+    "Repeat bookings + account loyalty": "Réservations répétées + fidélité des comptes",
+    "Annual: +CHF 37,392": "<strong style='color:var(--green)'>Annuel : +CHF 37'392</strong>",
+    "PESSIMISTIC": "PESSIMISTE",
+    "REALISTIC ★": "RÉALISTE ★",
+    "OPTIMISTIC": "OPTIMISTE",
+    "7 days": "7 jours",
+    "Weeks–months": "Semaines–mois",
+    "~3.25 hrs": "~3.25 h",
+    "+CHF 1,718": "+CHF 1'718",
+    "+CHF 3,116": "+CHF 3'116",
+    "+CHF 1,505": "+CHF 1'505",
+    "Key ROI Drivers Explained": "Les leviers du ROI expliqués",
+    "Driver": "Levier",
+    "How it works": "Comment ça marche",
+    "Evidence / benchmark": "Preuve / référence",
+    "Self-service booking changes": "<strong>Changements en libre-service</strong>",
+    "Clients cancel or reschedule themselves online up to 24h before. No phone call, no interruption during a cut, no staff time. The freed slot becomes immediately available for someone else to book.": "Les clients annulent ou replanifient eux-mêmes en ligne jusqu'à 24 h avant. Aucun appel, aucune interruption pendant une coupe, aucun temps d'équipe. Le créneau libéré devient immédiatement réservable par quelqu'un d'autre.",
+    "65 phone interactions/month × 3 min = 195 min of staff/owner time. Valued at CHF 50/h = CHF 165/month recovered, reclaimed during service hours when interruptions cost more than the minutes.": "65 appels/mois × 3 min = 195 min de temps équipe/patron. Valorisé à CHF 50/h = CHF 165/mois récupérés, pendant les heures de service, où les interruptions coûtent plus que les minutes.",
+    "Current platform shows only this week's availability. Clients planning a wedding haircut, a holiday trim, or a monthly routine cannot book more than 7 days ahead, they go to whoever lets them. Our platform is bookable weeks or months in advance.": "La plateforme actuelle n'affiche que les disponibilités de la semaine. Un client qui prépare une coupe de mariage, une retouche avant les vacances ou une routine mensuelle ne peut pas réserver au-delà de 7 jours, il va chez celui qui le permet. Notre plateforme est réservable des semaines ou des mois à l'avance.",
+    "Any client who plans more than a week ahead is currently lost. Even capturing 5–8 of those per month = CHF 175–280.": "Tout client qui planifie au-delà d'une semaine est aujourd'hui perdu. Même en en captant 5 à 8 par mois = CHF 175–280.",
+    "Trilingual acquisition (EN/DE)": "<strong>Acquisition trilingue (EN/DE)</strong>",
+    "English and German speakers in the Morges / Lake Geneva area (EPFL, expats, international companies) cannot navigate a French-only booking site. Our platform is the only barbershop site in the area that works in all three languages.": "Les anglophones et germanophones de la région de Morges / Léman (EPFL, expatriés, entreprises internationales) ne parviennent pas à réserver sur un site en français uniquement. Notre plateforme est le seul site de barbier de la région à fonctionner dans les trois langues.",
+    "Vaud canton: ~20% non-French speakers. Capturing 2 new clients/month = CHF 70 (pessimistic); 7/month = CHF 245 (realistic); 12/month = CHF 420 (optimistic). Conservative estimates, the platform is the only trilingual barbershop site in Morges.": "Canton de Vaud : ~20% de non-francophones. Capter 2 nouveaux clients/mois = CHF 70 (pessimiste) ; 7/mois = CHF 245 (réaliste) ; 12/mois = CHF 420 (optimiste). Estimations prudentes, la plateforme est le seul site de barbier trilingue à Morges.",
+    "No-show reduction": "<strong>Réduction des absences</strong>",
+    "Booking confirmation email includes a .ics calendar invite that lands directly in Apple Calendar or Google Calendar. A client with the appointment in their calendar is significantly less likely to forget.": "L'e-mail de confirmation inclut une invitation agenda .ics qui atterrit directement dans Apple Calendar ou Google Calendar. Un client qui a son rendez-vous dans son agenda risque bien moins de l'oublier.",
+    "At 10% baseline no-show rate on 875 bookings = ~87 empty slots. A 3% reduction = 26 slots saved × CHF 35 = CHF 910/month.": "À un taux d'absence de base de 10% sur 875 réservations = ~87 créneaux vides. Une réduction de 3% = 26 créneaux sauvés × CHF 35 = CHF 910/mois.",
+    "Stress reduction / focus time": "<strong>Réduction du stress / temps de concentration</strong>",
+    "Each of the 65 monthly phone interactions happens during service hours, meaning a barber or the owner is interrupted mid-cut. The call must be answered, the calendar checked, an alternative offered, and the system updated. Our platform removes every one of those interruptions: clients reschedule themselves online up to 24h before. The salon is quieter, staff are less distracted, and the client in the chair gets undivided attention.": "Chacun des 65 appels mensuels a lieu pendant les heures de service, un barbier ou le patron est interrompu en pleine coupe. Il faut répondre, vérifier l'agenda, proposer une alternative et mettre à jour le système. Notre plateforme supprime toutes ces interruptions : les clients replanifient eux-mêmes en ligne jusqu'à 24 h avant. Le salon est plus calme, l'équipe moins distraite, et le client dans le fauteuil reçoit une attention totale.",
+    "Unquantifiable in CHF, but 65 fewer interruptions per month is a meaningful quality-of-life improvement for anyone working behind the chair. Often more persuasive than any spreadsheet figure.": "Non chiffrable en CHF, mais 65 interruptions de moins par mois est une réelle amélioration de la qualité de vie pour quiconque travaille derrière le fauteuil. Souvent plus convaincant que n'importe quel chiffre de tableur.",
+    "Repeat booking via accounts": "<strong>Réservation répétée via les comptes</strong>",
+    "Logged-in clients can see their full appointment history and rebook a past service in two clicks. No re-entering of details, no re-choosing the barber, friction removed. Lower friction = more repeat visits.": "Les clients connectés voient tout leur historique et re-réservent un service passé en deux clics. Pas de ressaisie, pas de choix de barbier à refaire, la friction disparaît. Moins de friction = plus de visites répétées.",
+    "Barbershop repeat visit rates improve measurably when self-service accounts exist. Even 10 extra repeat bookings/month = CHF 350.": "Les taux de visites répétées progressent nettement quand des comptes en libre-service existent. Même 10 réservations répétées supplémentaires/mois = CHF 350.",
+    "* ROI figures represent estimated monthly value gained net of platform fee, compared to the current platform's capabilities. Revenue assumes CHF 35 average ticket. Time savings valued at CHF 50/hour. Booking volume (~875/month) inferred from WooCommerce sequential order numbers sampled at 12 real visits between Jan 2024 and Jun 2026; actual figures may vary. Actual results depend on adoption speed, client mix, and local market conditions.": "* Les chiffres du ROI représentent la valeur mensuelle estimée, nette de l'abonnement, par rapport aux capacités de la plateforme actuelle. Le revenu suppose un panier moyen de CHF 35. Le temps gagné est valorisé à CHF 50/heure. Le volume de réservations (~875/mois) est déduit des numéros de commande séquentiels WooCommerce, échantillonnés sur 12 visites réelles entre janv. 2024 et juin 2026 ; les chiffres réels peuvent varier. Les résultats réels dépendent de la vitesse d'adoption, du profil des clients et des conditions du marché local.",
+
+    // ── Pricing ──
+    "Our Pricing": "Nos tarifs",
+    "Simple, flat monthly fee. No commissions. No per-booking charges. No surprise invoices.": "Un tarif mensuel simple et fixe. Sans commission. Sans frais par réservation. Sans facture surprise.",
+    "Annual first month free": "Annuel&nbsp;<span style='display:inline-block;background:#15803d;color:#dcfce7;font-size:.68rem;font-weight:700;padding:1px 6px;border-radius:3px;vertical-align:middle'>premier mois offert</span>",
+    "Billed once per year · First month included at no charge": "Facturé une fois par an · Premier mois inclus gratuitement",
+    "/ month · 1 location · up to 2 barbers": "/ mois · 1 salon · jusqu'à 2 barbiers",
+    "/ month · CHF 1'617 billed annually · 1 location · up to 2 barbers": "/ mois · CHF 1'617 facturé annuellement · 1 salon · jusqu'à 2 barbiers",
+    "Full booking system": "Système de réservation complet",
+    "Automatic invoicing": "Facturation automatique",
+    "All 3 languages": "Les 3 langues",
+    "Azure Switzerland hosting": "Hébergement Azure Suisse",
+    "Email support": "Support par e-mail",
+    "RECOMMENDED FOR GZIM": "RECOMMANDÉ POUR GZIM",
+    "/ month · unlimited locations · unlimited barbers": "/ mois · salons illimités · barbiers illimités",
+    "/ month · CHF 2'167 billed annually · unlimited locations · unlimited barbers": "/ mois · CHF 2'167 facturé annuellement · salons illimités · barbiers illimités",
+    "Everything in Solo": "Tout de l'offre Solo",
+    "Unlimited barbers": "Barbiers illimités",
+    "Sentry error monitoring": "Surveillance des erreurs Sentry",
+    "Admin panel (Jazzmin)": "Panneau d'administration (Jazzmin)",
+    "3 premium themes": "3 thèmes premium",
+    "Priority support": "Support prioritaire",
+    "/ month · premium, done-for-you growth": "/ mois · croissance premium, clé en main",
+    "/ month · CHF 4'367 billed annually · done-for-you growth": "/ mois · CHF 4'367 facturé annuellement · croissance clé en main",
+    "FOR GROWTH & MULTI-SALON": "POUR LA CROISSANCE & MULTI-SALON",
+    "Everything in Business": "Tout de l'offre Business",
+    "All premium modules included, online shop, win-back automation, loyalty & gift cards, SMS/WhatsApp reminders (no per-module fees)": "Tous les modules premium inclus, boutique en ligne, relances automatiques, fidélité & cartes cadeaux, rappels SMS/WhatsApp (aucun frais par module)",
+    "Done-for-you marketing, Google Business Profile, automated review requests, trilingual local SEO": "Marketing clé en main, fiche Google Business, demandes d'avis automatisées, SEO local trilingue",
+    "Fiduciaire-ready VAT/tax exports + accounting-software sync": "Exports TVA/fiscaux prêts pour le fiduciaire + synchro logiciel comptable",
+    "New custom features built for you every month, included, no one-time build fees": "De nouvelles fonctionnalités sur mesure développées chaque mois, incluses, sans frais de développement uniques",
+    "Dedicated Azure environment + 99.9% uptime SLA": "Environnement Azure dédié + SLA de disponibilité 99.9%",
+    "Priority same-day support, direct line to the engineer": "Support prioritaire le jour même, ligne directe avec l'ingénieur",
+    "Quarterly growth review & strategy call": "Bilan de croissance trimestriel & appel stratégique",
+    "What Enterprise really is: not \"Business with a bigger number\", it's the done-for-you growth tier for an established or expanding operation. Business gives you the platform; Enterprise runs the growth engine on top of it: every premium module included as it ships, your local marketing and reviews actively managed, your accounting exports handled, a custom feature shipped every month, and a standing quarterly review where we look at retention, no-shows, and where the next revenue is. It targets the salon doing 3+ chairs or opening additional locations, where CHF 397 buys back far more than it costs in owner time and captured revenue.": "<strong>Ce qu'est vraiment l'offre Enterprise :</strong> pas « Business avec un chiffre plus gros », c'est le palier de croissance clé en main pour une activité établie ou en expansion. Business vous donne la plateforme ; Enterprise fait tourner le moteur de croissance par-dessus : chaque module premium inclus dès sa sortie, votre marketing local et vos avis activement gérés, vos exports comptables pris en charge, une fonctionnalité sur mesure livrée chaque mois, et un bilan trimestriel régulier où l'on regarde la fidélisation, les absences et où se trouve le prochain revenu. Il vise le salon à 3 fauteuils et plus ou qui ouvre d'autres adresses, où CHF 397 rapporte bien plus qu'il ne coûte en temps du patron et en revenu capté.",
+    "Further ideas to shape the tier (menu, not final)": "Autres idées pour façonner l'offre (menu, non définitif)",
+    "Multi-brand / white-label, run a second brand or concept from one system": "<strong>Multi-marque / marque blanche</strong>, gérez une seconde marque ou un concept depuis un seul système",
+    "Staff performance & commission tracking, per-barber revenue, tips, payout sheets": "<strong>Suivi des performances & commissions</strong>, revenu par barbier, pourboires, fiches de paie",
+    "Automated monthly business report, KPIs emailed to the owner, no login needed": "<strong>Rapport d'activité mensuel automatique</strong>, KPI envoyés par e-mail au patron, sans connexion",
+    "Client PWA / \"add to home screen\" app with push notifications for reminders & offers": "<strong>App PWA client / « ajouter à l'écran d'accueil »</strong> avec notifications push pour rappels & offres",
+    "No-show deposits / prepayment via TWINT or terminal integration": "<strong>Acomptes anti-absence / prépaiement</strong> via TWINT ou intégration terminal",
+    "Dedicated account manager + white-glove onboarding & staff training": "<strong>Gestionnaire de compte dédié</strong> + intégration accompagnée & formation de l'équipe",
+    "Advanced security, annual penetration test, audit-log exports, WAF": "<strong>Sécurité avancée</strong>, test d'intrusion annuel, exports du journal d'audit, WAF",
+    "Priority roadmap influence, your feature requests jump the queue": "<strong>Influence prioritaire sur la feuille de route</strong>, vos demandes passent devant",
+    "What Is Included at Every Tier": "Ce qui est inclus dans chaque offre",
+    "Item": "Élément",
+    "Included?": "Inclus ?",
+    "Notes": "Notes",
+    "Included": "Inclus",
+    "Always Swiss-hosted": "Toujours hébergé en Suisse",
+    "Managed, backed-up, replicated": "Géré, sauvegardé, répliqué",
+    "SSL/HTTPS certificate": "Certificat SSL/HTTPS",
+    "Auto-renewed via Azure": "Renouvelé automatiquement via Azure",
+    "Sentry monitoring": "Surveillance Sentry",
+    "Error + session replay": "Erreurs + relecture de session",
+    "Bug fixes": "Corrections de bugs",
+    "All platform bugs fixed at no extra charge": "Tous les bugs de la plateforme corrigés sans frais",
+    "Minor feature updates": "Mises à jour mineures",
+    "Improvements deployed to all clients": "Améliorations déployées à tous les clients",
+    "Email confirmation system": "Système d'e-mails de confirmation",
+    "Commission on bookings ": "Commission sur les réservations",
+    "0% always": "0% toujours",
+    "No matter how many clients book online": "Quel que soit le nombre de réservations en ligne",
+    "Per-staff charges": "Frais par employé",
+    "Add as many barbers as needed": "Ajoutez autant de barbiers que nécessaire",
+    "Domain hosting / migration": "Hébergement / migration de domaine",
+    "Free migration from existing domain, or new domain purchased on your behalf": "Migration gratuite du domaine existant, ou nouveau domaine acheté pour vous",
+    "Premium modules & custom features à la carte, one-time fee priced by complexity, own it forever": "Modules premium & fonctionnalités sur mesure à la carte, tarif unique selon la complexité, à vous pour toujours",
+    "Business add-ons, pay once, own it forever. On Business you keep the flat platform fee and add only the features you want, each billed as a single one-time fee based on how much work it takes to build, no recurring per-module charges. (On Enterprise, every module and custom build below is included at no extra cost.)": "<strong>Options Business, payez une fois, c'est à vous pour toujours.</strong> Sur l'offre Business, vous gardez le forfait plateforme fixe et n'ajoutez que les fonctionnalités souhaitées, chacune facturée en un tarif unique selon le travail nécessaire à sa réalisation, aucun frais récurrent par module. (Sur l'offre Enterprise, chaque module et développement sur mesure ci-dessous est inclus sans frais supplémentaire.)",
+    "Complexity": "Complexité",
+    "Typical examples": "Exemples typiques",
+    "One-time fee": "Tarif unique",
+    "On quotation": "Sur devis",
+    "WordPress admin": "Admin WordPress",
+    "Extra field, small screen tweak, new email template, config change": "Champ supplémentaire, petit ajustement d'écran, nouveau modèle d'e-mail, changement de configuration",
+    "A new module with its own admin & booking flow, gift cards, loyalty page, staff commission sheet": "Un nouveau module avec son propre admin & tunnel de réservation, cartes cadeaux, page de fidélité, feuille de commissions du personnel",
+    "External integration, TWINT / card payments, accounting sync, SMS/WhatsApp automation, PWA push": "Intégration externe, paiements TWINT / carte, synchronisation comptable, automatisation SMS/WhatsApp, notifications push PWA",
+    "Advanced": "Avancé",
+    "Every feature is quoted upfront before any work starts, priced once by complexity, then it's yours, deployed to your platform and maintained at no extra charge.": "Chaque fonctionnalité est chiffrée à l'avance avant tout travail, facturée une seule fois selon la complexité, puis elle vous appartient, déployée sur votre plateforme et maintenue sans frais supplémentaires.",
+    "Custom feature development": "Développement de fonctionnalités sur mesure",
+    "Add-on · included on Enterprise": "En option · inclus sur Enterprise",
+    "Business: one-time fee per feature, priced by complexity · Enterprise: built for you every month, included": "Business : tarif unique par fonctionnalité, selon la complexité · Enterprise : développée chaque mois, incluse",
+    "Annual Plan": "Offre annuelle",
+    "Annual, Business Plan": "Annuel, offre Business",
+    "First month free · CHF 181/month effectiveBilled once · Cancel before renewal": "Premier mois offert · CHF 181/mois effectif<br>Facturé une fois · Annulable avant renouvellement",
+    "Monthly, Business Plan": "Mensuel, offre Business",
+    "Cancel any time with 30 days notice": "Annulable à tout moment avec un préavis de 30 jours",
+    "Gzim-Specific Investment Summary": "Résumé de l'investissement pour Gzim",
+    "Setup cost: CHF 0, the platform is already built and deployed. Monthly cost: CHF 197 (Business Plan), flat, no commissions, no surprises. Break-even: Within 30 days, Gzim pays less and owns more. Realistic annual net gain: CHF 20,616 (see ROI tab).": "<strong>Coût de mise en place :</strong> CHF 0, la plateforme est déjà construite et déployée.<br><br><strong>Coût mensuel :</strong> CHF 197 (offre Business), fixe, sans commission, sans surprise.<br><br><strong>Rentabilité :</strong> En 30 jours, Gzim paie moins et possède plus.<br><br><strong>Gain net annuel réaliste :</strong> CHF 20'616 (voir l'onglet ROI).",
+
+    // ── Roadmap ──
+    "Roadmap, Where the Platform Can Go Next": "Feuille de route, où la plateforme peut aller ensuite",
+    "The platform live today already covers booking, invoicing, staff, and analytics. Because the codebase is owned and purpose-built, not a rigid third-party product, new modules can be added directly on top of it, using data the system already captures. No switching platforms, no migration, no re-entering client information. These are the highest-impact next steps.": "La plateforme en ligne aujourd'hui couvre déjà la réservation, la facturation, l'équipe et l'analytique. Parce que le code vous appartient et est conçu sur mesure, pas un produit tiers rigide, de nouveaux modules peuvent s'ajouter directement par-dessus, en s'appuyant sur les données déjà capturées. Pas de changement de plateforme, pas de migration, pas de ressaisie des informations clients. Voici les prochaines étapes à plus fort impact.",
+    "High-Impact Next Modules": "Prochains modules à fort impact",
+    "Online Shop Proposed": "Boutique en ligne <span class='badge badge-warn'>Proposé</span>",
+    "Sell the salon's own products, pomade, beard oil, shampoo, gift cards, directly on the site. Clients buy standalone or add a product to their booking. Owned and Swiss-hosted, with no marketplace commission on any sale. A new revenue line from the traffic the booking site already brings in.": "Vendez les produits du salon, pommade, huile à barbe, shampooing, cartes cadeaux, directement sur le site. Le client achète seul ou ajoute un produit à sa réservation. Propriétaire et hébergé en Suisse, sans commission de place de marché sur aucune vente. Une nouvelle source de revenu à partir du trafic que le site de réservation génère déjà.",
+    "Automated Win-Back Coupons Proposed": "Coupons de relance automatiques <span class='badge badge-warn'>Proposé</span>",
+    "The system already knows each client's last visit. It can automatically email clients who haven't returned in X days (say, 8 weeks) with a personalised coupon code, \"We miss you, here's 15% off your next cut.\" Dormant clients become repeat revenue on autopilot, with zero manual effort.": "Le système connaît déjà la dernière visite de chaque client. Il peut automatiquement envoyer un e-mail aux clients non revenus depuis X jours (par ex. 8 semaines) avec un code de réduction personnalisé, « Vous nous manquez, voici 15% sur votre prochaine coupe. » Les clients dormants redeviennent une source de revenu en pilote automatique, sans effort manuel.",
+    "Tax & VAT Reports from Invoices Proposed": "Rapports fiscaux & TVA depuis les factures <span class='badge badge-warn'>Proposé</span>",
+    "One-click monthly or quarterly VAT summary plus a full invoice export (CSV / Excel) for the fiduciaire, generated straight from the invoices the system already issues. The VAT owed becomes a single number at period end, instead of hours of manual bookkeeping.": "Récapitulatif de TVA mensuel ou trimestriel en un clic, plus un export complet des factures (CSV / Excel) pour le fiduciaire, généré directement à partir des factures que le système émet déjà. La TVA due devient un seul chiffre en fin de période, au lieu d'heures de comptabilité manuelle.",
+    "Further Ideas on the Table": "Autres idées sur la table",
+    "Native Mobile App (Android / iOS) Proposed": "Application mobile native (Android / iOS) <span class='badge badge-warn'>Proposé</span>",
+    "The booking site already works like an app on mobile. A native app in the App Store and Google Play goes one step further, a home-screen icon clients tap to re-book their usual cut in seconds, and push notifications for reminders and win-back offers that reach them even when email goes unread. It builds on the same platform and the same data, so it is an addition, not a rebuild.": "Le site de réservation fonctionne déjà comme une app sur mobile. Une application native sur l'App Store et Google Play va un cran plus loin, une icône sur l'écran d'accueil que le client touche pour reprendre sa coupe habituelle en quelques secondes, et des notifications push pour les rappels et les offres de relance qui l'atteignent même quand l'e-mail n'est pas lu. Elle s'appuie sur la même plateforme et les mêmes données, c'est donc un ajout, pas une reconstruction.",
+    "A text the day before the appointment, on top of the calendar invite, squeezing the no-show rate down even further.": "Un SMS la veille du rendez-vous, en plus de l'invitation agenda, pour faire baisser encore le taux d'absence.",
+    "Points & VIP Tiers Loyalty v2": "Points &amp; paliers VIP <span class='badge badge-warn'>Fidélité v2</span>",
+    "The stamp-card loyalty program is already live (every 10th visit rewarded). The next step turns visits into spendable points and unlocks VIP tiers, bigger perks for your most frequent clients, all built on the same loyalty data the platform already tracks.": "Le programme de fidélité à tampons est déjà en ligne (chaque 10e visite récompensée). L'étape suivante transforme les visites en points dépensables et débloque des paliers VIP, des avantages plus importants pour vos clients les plus fréquents, le tout construit sur les mêmes données de fidélité que la plateforme suit déjà.",
+    "Digital Gift Cards Proposed": "Cartes cadeaux numériques <span class='badge badge-warn'>Proposé</span>",
+    "Sell gift cards online, redeemable at booking, a popular seller around the holidays and an easy extra revenue line.": "Vendez des cartes cadeaux en ligne, utilisables à la réservation, un best-seller autour des fêtes et une source de revenu supplémentaire facile.",
+    "Waitlist Auto-Fill Proposed": "Remplissage auto de liste d'attente <span class='badge badge-warn'>Proposé</span>",
+    "When a client cancels, the freed slot is offered automatically to waiting clients, so last-minute gaps get filled instead of lost.": "Quand un client annule, le créneau libéré est proposé automatiquement aux clients en attente, les trous de dernière minute se comblent au lieu d'être perdus.",
+    "Every item above builds on data the platform already captures. Because Gzim owns the system, these are additions, not a new subscription, not a migration, not a fresh learning curve. The platform grows with the business.": "<strong>Chaque élément ci-dessus s'appuie sur des données déjà capturées par la plateforme.</strong> Parce que Gzim possède le système, ce sont des ajouts, pas un nouvel abonnement, pas une migration, pas une nouvelle courbe d'apprentissage. La plateforme grandit avec l'activité.",
+
+    // ── Key Pitch Points ──
+    "Key Pitch Points, For the Conversation": "Arguments clés, pour la discussion",
+    "The arguments that matter most, in plain language.": "Les arguments qui comptent le plus, exprimés simplement.",
+    "1. \"The platform pays for itself on booking changes alone.\"": "1. « La plateforme se rembourse rien qu'avec les changements de réservation. »",
+    "If 7.5% of your ~875 bookings/month get changed or cancelled, that's 65 phone interactions at ~3 minutes each = 195 minutes (3.25 hours) of your time per month, during service hours when the phone should not ring. At CHF 50/hour that's CHF 165/month. Add 2 new EN/DE clients at CHF 35 = CHF 70. Add 3 bookings from clients who could now book more than a week ahead = CHF 105. You're already at CHF 340 before counting no-shows, repeat bookings, or the stress of answering the phone mid-cut.": "Si 7.5% de vos ~875 réservations/mois sont modifiées ou annulées, cela fait 65 appels à ~3 minutes chacun = 195 minutes (3.25 heures) de votre temps par mois, pendant les heures de service quand le téléphone ne devrait pas sonner. À CHF 50/heure, cela fait CHF 165/mois. Ajoutez 2 nouveaux clients EN/DE à CHF 35 = CHF 70. Ajoutez 3 réservations de clients pouvant désormais réserver à plus d'une semaine = CHF 105. Vous êtes déjà à CHF 340 avant même de compter les absences, les réservations répétées ou le stress de répondre au téléphone en pleine coupe.",
+    "2. \"No-shows are costing you real money, here's what we do about it.\"": "2. « Les absences vous coûtent de l'argent réel, voici ce qu'on y fait. »",
+    "Industry data shows 10–15% of barbershop appointments result in no-shows without reminders. At ~875 bookings/month, that's 87–130 empty chair-hours per month. A calendar invite (.ics) landing directly in the client's phone reduces no-shows measurably. Even recovering 26 appointments/month at CHF 35 = CHF 910/month recovered, more than 4× the platform cost, from this driver alone.": "Les données du secteur montrent que 10 à 15% des rendez-vous en barbershop se soldent par une absence sans rappel. À ~875 réservations/mois, cela fait 87 à 130 heures-fauteuil vides par mois. Une invitation agenda (.ics) qui atterrit directement dans le téléphone du client réduit les absences de façon mesurable. Récupérer ne serait-ce que 26 rendez-vous/mois à CHF 35 = CHF 910/mois, plus de 4× le coût de la plateforme, rien qu'avec ce levier.",
+    "3. \"You can finally see next month, not just next week.\"": "3. « Vous voyez enfin le mois prochain, pas seulement la semaine prochaine. »",
+    "Today the calendar fills one week at a time, so every Monday starts near-empty and the week rides on walk-ins and same-day calls. When clients book weeks or months ahead, the schedule fills further out: you can plan staffing, holidays, and your own time around a book that's already partly full. A booking made three weeks from now is income you can count on today, predictable demand instead of feast-or-famine.": "Aujourd'hui, l'agenda se remplit une semaine à la fois : chaque lundi démarre quasi vide et la semaine dépend des passages spontanés et des appels du jour. Quand les clients réservent des semaines ou des mois à l'avance, le planning se remplit plus loin : vous pouvez organiser les effectifs, les congés et votre propre temps autour d'un agenda déjà partiellement plein. Une réservation prise dans trois semaines est un revenu sur lequel vous pouvez compter dès aujourd'hui, une demande prévisible au lieu de l'alternance entre trop et pas assez.",
+    "4. \"Most of your clients book on a phone, the site is built for that.\"": "4. « La plupart de vos clients réservent sur un téléphone, le site est fait pour ça. »",
+    "The whole platform is modern, fast, and tested on PC, Android, and iPhone. The booking flow feels like an app: the client picks salon, service, barber, and slot while a live summary builds beside them, phone numbers are tap-to-call, and everything adapts to the screen. A smooth mobile experience is the difference between a booking completed and a booking abandoned, and it quietly signals that Gzim Barber House is a serious, current business.": "Toute la plateforme est moderne, rapide et testée sur PC, Android et iPhone. Le parcours de réservation ressemble à une app : le client choisit salon, service, barbier et créneau tandis qu'un récapitulatif se construit à côté en direct, les numéros sont cliquables pour appeler, et tout s'adapte à l'écran. Une expérience mobile fluide fait la différence entre une réservation aboutie et une réservation abandonnée, et cela signale discrètement que Gzim Barber House est une entreprise sérieuse et actuelle.",
+    "5. \"Adding a barber or a location takes minutes, and you do it yourself.\"": "5. « Ajouter un barbier ou un salon prend quelques minutes, et vous le faites vous-même. »",
+    "Grow the team, change someone's hours, block a holiday, swap a price, update the salon text, upload a barber's photo, all from the admin panel, no developer needed. Time off automatically blocks that barber's slots. Opening a third salon means adding a location, not rebuilding a website. And every change is recorded in an audit log, who changed what, and when, so nothing happens to your schedule or prices without a trace.": "Agrandissez l'équipe, changez les horaires de quelqu'un, bloquez un congé, modifiez un tarif, mettez à jour le texte du salon, chargez la photo d'un barbier, le tout depuis le panneau d'administration, sans développeur. Une absence bloque automatiquement les créneaux du barbier. Ouvrir un troisième salon, c'est ajouter une adresse, pas reconstruire un site. Et chaque modification est consignée dans un journal d'audit, qui a changé quoi, et quand, pour que rien n'arrive à votre planning ou vos tarifs sans laisser de trace.",
+    "6. \"Your client data belongs to you, permanently.\"": "6. « Vos données clients vous appartiennent, pour toujours. »",
+    "Every client who books is stored in your own database, their name, contact, booking history, and total spend. No third party holds your list. No subscription price hike can hold you hostage. Cancel anytime and receive a complete data export in any format. This is your business data, on your server, under your control.": "Chaque client qui réserve est stocké dans votre propre base de données, son nom, ses coordonnées, son historique et son total dépensé. Aucun tiers ne détient votre liste. Aucune hausse d'abonnement ne peut vous prendre en otage. Annulez à tout moment et recevez un export complet des données dans n'importe quel format. Ce sont vos données d'entreprise, sur votre serveur, sous votre contrôle.",
+    "7. \"You're invisible to a significant share of your potential clients.\"": "7. « Vous êtes invisible pour une part importante de vos clients potentiels. »",
+    "The Morges area has a significant expat and international population, EPFL researchers, international company employees, English and German speakers who live 10 minutes from your salon. They search \"barber Morges\" or \"Friseur Morges\", land on a French-only site, and leave, not because they don't want to book, but because they can't navigate it. Our platform is trilingual. That is a competitive edge nobody else in Morges has.": "La région de Morges compte une importante population d'expatriés et d'internationaux, chercheurs de l'EPFL, employés d'entreprises internationales, anglophones et germanophones qui vivent à 10 minutes de votre salon. Ils cherchent « barber Morges » ou « Friseur Morges », tombent sur un site en français uniquement, et repartent, non parce qu'ils ne veulent pas réserver, mais parce qu'ils n'y arrivent pas. Notre plateforme est trilingue. C'est un avantage concurrentiel que personne d'autre à Morges n'a.",
+    "8. \"You legally need invoices, we generate them automatically.\"": "8. « Vous avez légalement besoin de factures, nous les générons automatiquement. »",
+    "Under Swiss law (Art. 958f CO), businesses must keep proper accounting records including VAT-compliant invoices. Our system generates a compliant, numbered, VAT-separated invoice for every booking, automatically, with zero manual work.": "Selon le droit suisse (art. 958f CO), les entreprises doivent tenir une comptabilité en règle, avec des factures conformes à la TVA. Notre système génère une facture conforme, numérotée et avec TVA séparée pour chaque réservation, automatiquement, sans aucun travail manuel.",
+    "9. \"Every phone call mid-cut is a small failure of the experience.\"": "9. « Chaque appel en pleine coupe est un petit échec de l'expérience. »",
+    "When a client calls to reschedule and the barber has to stop, pick up the phone, look up the schedule, find an alternative, and confirm, that is not just 3 minutes lost. It is an interruption in the middle of a haircut, a distraction for the client in the chair, and daily background stress that adds up across 65 interactions a month. Our platform removes those 65 interruptions entirely. A quieter salon is a better working environment and a better client experience.": "Quand un client appelle pour se replanifier et que le barbier doit s'arrêter, décrocher, consulter l'agenda, trouver une alternative et confirmer, ce ne sont pas que 3 minutes perdues. C'est une interruption au milieu d'une coupe, une distraction pour le client dans le fauteuil, et un stress de fond quotidien qui s'accumule sur 65 interactions par mois. Notre plateforme supprime entièrement ces 65 interruptions. Un salon plus calme, c'est un meilleur environnement de travail et une meilleure expérience client.",
+    "10. \"This is not a subscription, it's ownership.\"": "10. « Ce n'est pas un abonnement, c'est de la propriété. »",
+    "Subscription platforms can change their pricing, restrict features, or shut down. Your client data, booking history, and invoices can disappear with them. Our platform is a custom-built system, you own the data, it lives on your Azure account, and you can export everything at any time. No lock-in beyond 30 days notice.": "Les plateformes par abonnement peuvent changer leurs tarifs, restreindre des fonctions ou fermer. Vos données clients, votre historique et vos factures peuvent disparaître avec elles. Notre plateforme est un système sur mesure, vous possédez les données, elles vivent sur votre compte Azure, et vous pouvez tout exporter à tout moment. Aucun verrouillage au-delà d'un préavis de 30 jours.",
+    "11. \"We proactively fix problems before clients notice.\"": "11. « Nous corrigeons les problèmes avant que les clients ne les remarquent. »",
+    "Sentry monitors the live site 24/7. If a client hits a bug on the booking page at 23h00, we know about it before they call to complain in the morning. Session replay shows us exactly what happened. Most platforms don't even tell you when something breaks, you find out from a 1-star Google review.": "Sentry surveille le site en direct 24/7. Si un client rencontre un bug sur la page de réservation à 23h00, nous le savons avant qu'il n'appelle pour se plaindre le matin. La relecture de session nous montre exactement ce qui s'est passé. La plupart des plateformes ne vous préviennent même pas quand quelque chose casse, vous l'apprenez par un avis Google 1 étoile.",
+    "Objection Handling": "Traitement des objections",
+    "Objection": "Objection",
+    "Response": "Réponse",
+    "\"Our current website already has online booking.\"": "<strong>« Notre site actuel a déjà la réservation en ligne. »</strong>",
+    "It does, in French only, without customer accounts, without automatic VAT invoices, and on a platform that holds your client data. Our system is yours: trilingual, client accounts, compliant invoices, zero commission, and all data belongs to you. The question isn't whether you have booking, it's what it can't do and who owns your clients.": "En effet, en français uniquement, sans comptes clients, sans factures TVA automatiques, et sur une plateforme qui détient vos données clients. Notre système est le vôtre : trilingue, comptes clients, factures conformes, zéro commission, et toutes les données vous appartiennent. La question n'est pas si vous avez la réservation, c'est ce qu'elle ne peut pas faire et qui possède vos clients.",
+    "\"We don't have many German/English clients.\"": "<strong>« Nous n'avons pas beaucoup de clients allemands/anglais. »</strong>",
+    "Yet. The reason you don't is that you're invisible to them. They search \"barber Morges\" in English, land on your French-only site, and leave. Our platform puts you in front of them in their language. You don't know how many clients you're losing, you only see the ones you have.": "Pas encore. Si vous n'en avez pas, c'est que vous êtes invisible pour eux. Ils cherchent « barber Morges » en anglais, tombent sur votre site en français uniquement, et repartent. Notre plateforme vous met devant eux dans leur langue. Vous ne savez pas combien de clients vous perdez, vous ne voyez que ceux que vous avez.",
+    "\"CHF 197/month seems expensive.\"": "<strong>« CHF 197/mois, ça paraît cher. »</strong>",
+    "CHF 197 is the cost of 45 minutes of scheduling phone calls per week, time that currently costs you that anyway, invisibly, during service hours. If the platform saves you that time alone, it's already near break-even. Every EN/DE client, every no-show avoided, every advance booking is pure upside on top.": "CHF 197, c'est le coût de 45 minutes d'appels de planning par semaine, un temps qui vous coûte déjà cela de toute façon, de manière invisible, pendant les heures de service. Si la plateforme vous fait gagner ne serait-ce que ce temps, elle est déjà proche du seuil de rentabilité. Chaque client EN/DE, chaque absence évitée, chaque réservation à l'avance est un pur bonus par-dessus.",
+    "\"What if I want to stop?\"": "<strong>« Et si je veux arrêter ? »</strong>",
+    "Cancel with 30 days notice. Your data is yours, we'll export it in any format. No lock-in, no long-term contracts, no penalty.": "Annulez avec un préavis de 30 jours. Vos données sont les vôtres, nous les exportons dans n'importe quel format. Aucun verrouillage, aucun contrat de longue durée, aucune pénalité.",
+    "\"We already have loyal clients who know us.\"": "<strong>« Nous avons déjà des clients fidèles qui nous connaissent. »</strong>",
+    "Loyalty is great. Our platform makes them even more loyal, they can rebook in two clicks, see their history, and get calendar reminders. And while you serve your loyal clients, the platform finds the next generation who might never have found you on a French-only site.": "La fidélité, c'est précieux. Notre plateforme les rend encore plus fidèles, ils re-réservent en deux clics, voient leur historique et reçoivent des rappels agenda. Et pendant que vous servez vos clients fidèles, la plateforme trouve la génération suivante, qui ne vous aurait peut-être jamais trouvé sur un site en français uniquement."
+  };
+
+  var SEL = "h1,.subtitle,nav.tabs a,h2,h3,h4,p,li,td,th,.card .big,.card .label,.card .sublabel,.feature .name,.feature .desc,.chart-label,.kpi-label,.kpi-sub,.kpi-value,.plan-tag,.plan-period span,.period-btn,.billing-toggle,.subtab,.roi-line span,.roi-total span,.heat-legend span,.note";
+  var nodes = [];
+  window.__i18nCapture = function () {   // (re-)snapshot the translatable nodes
+    nodes = [];
+    document.querySelectorAll(SEL).forEach(function (el) {
+      if (el.closest('#competitors')) return;   // hidden tab, never shown
+      el.__k = norm(el.textContent);
+      el.__en = el.innerHTML;
+      nodes.push(el);
+    });
+  };
+  window.__i18nCapture();
+
+  window.applyLang = function (lang) {
+    LANG = lang;
+    nodes.forEach(function (el) {
+      if (lang === 'fr') { var f = FR[el.__k]; el.innerHTML = (f != null) ? f : el.__en; }
+      else el.innerHTML = el.__en;
+    });
+    if (typeof rebuildCharts === 'function') rebuildCharts();
+    var b = document.getElementById('langToggle');
+    if (b) b.textContent = (lang === 'fr') ? 'EN' : 'FR';
+    document.documentElement.lang = lang;
+    try { localStorage.setItem('pitchLang', lang); } catch (e) {}
+  };
+
+  var btn = document.createElement('button');
+  btn.id = 'langToggle';
+  btn.type = 'button';
+  btn.textContent = 'FR';
+  btn.title = 'Français / English';
+  btn.style.cssText = 'position:fixed;top:14px;right:16px;z-index:200;background:var(--accent);color:#1a1510;border:0;border-radius:6px;padding:.45rem .85rem;font-weight:700;font-size:.8rem;letter-spacing:.03em;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45)';
+  btn.onclick = function () { applyLang(LANG === 'fr' ? 'en' : 'fr'); };
+  document.body.appendChild(btn);
+
+  var saved; try { saved = localStorage.getItem('pitchLang'); } catch (e) {}
+  applyLang(saved === 'en' ? 'en' : 'fr');
+})();
+</script><button id="langToggle" type="button" title="Français / English" style="position: fixed; top: 14px; right: 16px; z-index: 200; background: var(--accent); color: rgb(26, 21, 16); border: 0px; border-radius: 6px; padding: 0.45rem 0.85rem; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.03em; cursor: pointer; box-shadow: rgba(0, 0, 0, 0.45) 0px 2px 10px;">FR</button>
+
+<!-- ═══════════════ EDIT MODE — add ?edit to the URL to activate the toolbar ═══════════════
+     Hide/reorder/tweak the pitch and export a PDF, no code changes. Edits are stored as
+     lightweight OPERATIONS (hide / reorder / text) applied over the always-current pitch —
+     so content updates never overwrite your curation, and your curation never masks new
+     content. Auto-saved to this browser and exportable as a standalone file. The plain URL
+     (no ?edit) shows your curated version without the toolbar; Réinitialiser clears it. -->
+
+
+
+</body></html>
