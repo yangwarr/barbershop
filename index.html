@@ -161,7 +161,7 @@
   body{padding:1rem !important;}
   h1{font-size:1.3rem;padding-right:3.4rem;} .subtitle{font-size:.8rem;}
   nav.tabs{flex-wrap:wrap;gap:.4rem;padding-bottom:.6rem;}
-  nav.tabs a{white-space:nowrap;font-size:.85rem;padding:.45rem .7rem;}
+  nav.tabs a{white-space:nowrap;font-size:.78rem;padding:.4rem .55rem;}
   .card-row,.feature-grid,.pricing-grid,.kpi-row{grid-template-columns:1fr !important;}
   .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
   .tbl-wrap table{min-width:560px;}
@@ -1838,7 +1838,7 @@
   btn.title = 'Français / English';
   btn.style.cssText = 'position:fixed;top:14px;right:16px;z-index:200;background:var(--accent);color:#1a1510;border:0;border-radius:6px;padding:.45rem .85rem;font-weight:700;font-size:.8rem;letter-spacing:.03em;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45)';
   btn.onclick = function () { applyLang(LANG === 'fr' ? 'en' : 'fr'); };
-  document.body.appendChild(btn);
+  /* FR toggle removed */
 
   var saved; try { saved = localStorage.getItem('pitchLang'); } catch (e) {}
   applyLang(saved === 'en' ? 'en' : 'fr');
